@@ -1,20 +1,49 @@
 #include "network_class.h"
 
 Network_Class::Network_Class() {
+    if (this->m_clsIsInit) {
+        return;
+    }
+
+    this->m_clsIsInit = true;
+
     this->m_url = nullptr;
+
     connect(this->m_file_class, SIGNAL(dataChanged()), this, SLOT(clipBoardChange(bool)));
+    this->m_ThreadStartFlag = false;
 }
 
 Network_Class::Network_Class(const QUrl &Url) {
+    if (this->m_clsIsInit) {
+        return;
+    }
+
+    this->m_clsIsInit = true;
+
     this->m_url->setHost(Url.host());
     this->m_url->setPort(Url.port());
     this->m_url->setPassword(Url.password());
     this->m_url->setUserName(Url.userName());
     this->m_url->setScheme(Url.scheme());
+
+    connect(this->m_file_class, SIGNAL(dataChanged()), this, SLOT(clipBoardChange(bool)));
+
+    this->m_ThreadStartFlag = false;
 }
 
 Network_Class::Network_Class(QUrl *url) {
+    if (this->m_clsIsInit) {
+        return;
+    }
+
+    this->m_clsIsInit = true;
+
     this->m_url = url;
+    this->m_ThreadStartFlag = false;
+
+    connect(this->m_file_class, SIGNAL(dataChanged()), this, SLOT(clipBoardChange(bool)));
+
+    this->m_ThreadStartFlag = false;
 }
 
 bool Network_Class::finished_of_Reply(QNetworkReply *ftp_reply) {
@@ -124,16 +153,6 @@ QNetworkAccessManager *Network_Class::getInstance() {
     }
 }
 
-QUrl *Network_Class::getUrl() {
-    this->isInit();
-    return this->m_url;
-}
-
-bool Network_Class::getUrlFromMainWindow(QUrl *Url) {
-    this->m_url = Url;
-    return true;
-}
-
 bool Network_Class::isInit() {
     if (this->m_url->isEmpty()) {
         return false;
@@ -159,6 +178,7 @@ void Network_Class::setUrl(const QUrl &url) {
 }
 
 bool Network_Class::clipBoardChange(bool status) {
-    this->m_cbchange = ~this->m_cbchange;
+    this->m_cbChange = ~this->m_cbChange;
 }
+
 

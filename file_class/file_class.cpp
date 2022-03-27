@@ -108,14 +108,18 @@ QString File_Class::generateMessage(QString &str) {
     int msgLen = 36 + content_bit + 4;
 
     //msgLen的长度
-    int msglenBit = Pubilc_Func::calculate_dec_Bit(msgLen);
+    int msgLenBit = Pubilc_Func::calculate_dec_Bit(msgLen);
+    msgLen += msgLenBit;
+    msgLenBit = Pubilc_Func::calculate_dec_Bit(msgLen);
 
-    msgLen += msglenBit;
-    msglenBit = Pubilc_Func::calculate_dec_Bit(msgLen);
+    //拼凑报文
+    message << "%%Message&&" << CurrentTime << "&&" << content_bit << "&&" << msglenBit << "::" << str.toStdString();
 
-    message << "%%Message&&" << CurrentTime << "&&" << content_bit << "&&";
+    //stringstream转std::string
+    std::string retStr;
+    message >> retStr;
 
-
+    return {retStr.c_str()};
 }
 
 

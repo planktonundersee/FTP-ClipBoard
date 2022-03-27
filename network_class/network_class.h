@@ -38,15 +38,12 @@ public:
     //QString 上次到服务器
     bool uploadto_Server();
 
-    QUrl *getUrl();
-
     void setUrl(const QUrl &url);
 
     void setUrl(QUrl *url);
 
 public slots:
 
-    bool getUrlFromMainWindow(QUrl *Url);
 
     bool replyError(QNetworkReply::NetworkError);
 
@@ -65,7 +62,9 @@ private:
 
 private:
     QUrl *m_url{};
-    bool m_cbchange;
+    bool m_clsIsInit;
+    bool m_cbChange;
+    bool m_ThreadStartFlag;
     bool m_ThreadStatus{};
     int m_reconnectTimes{};
     QNetworkReply *m_reply{};

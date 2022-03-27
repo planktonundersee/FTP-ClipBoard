@@ -55,7 +55,7 @@ public:
     [[noreturn]] void run() override;
 
     //生成报文
-    QString generateMessage(QString &str);
+    static QString generateMessage(QString &str);
 
 private:
     QClipboard *m_ClipBoard{};
