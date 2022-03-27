@@ -89,7 +89,7 @@ QClipboard *File_Class::getClipBoard() {
 }
 
 //根据传入的数据生成帧
-//%%Message&&2022/03/27 12:26:23 sun&&11&&47&&58::xxxxxxxxxxx
+//%%Message&&2022/03/27 12:26:23 sun&&11&&47::xxxxxxxxxxx
 //%%表示新一帧开始, 以Message表示是报文，&& 为分隔符, ::表示报文结束。
 //表示报文头长47
 //58表示此帧总长为58
@@ -97,13 +97,23 @@ QClipboard *File_Class::getClipBoard() {
 QString File_Class::generateMessage(QString &str) {
     std::stringstream message;
 
+    //计算真正的内容才长度
     long long int content = str.length();
-    int the_length_of_content = Pubilc_Func::calculate_dec_Bit(content);
+    int content_bit = Pubilc_Func::calculate_dec_Bit(content);
 
+    //拿到当前时间
     std::string CurrentTime = Pubilc_Func::getCurrentTime();
 
-    int msgLen = 36 + the_length_of_content + 4;
-    message << "%%Message&&" << CurrentTime << "&&" << the_length_of_content << "&&";
+    //去除报文和总长的长度
+    int msgLen = 36 + content_bit + 4;
+
+    //msgLen的长度
+    int msglenBit = Pubilc_Func::calculate_dec_Bit(msgLen);
+
+    msgLen += msglenBit;
+    msglenBit = Pubilc_Func::calculate_dec_Bit(msgLen);
+
+    message << "%%Message&&" << CurrentTime << "&&" << content_bit << "&&";
 
 
 }
