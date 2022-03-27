@@ -67,6 +67,8 @@ private slots:
 
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
 
+    void getRcvBuf(QString &);
+
 private:
     void setText();
 

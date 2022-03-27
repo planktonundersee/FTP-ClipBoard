@@ -5,8 +5,8 @@ Network_Class::Network_Class() {
         return;
     }
 
+    this->m_operator_Mutex = true;
     this->m_clsIsInit = true;
-
     this->m_url = nullptr;
 
     connect(this->m_file_class, SIGNAL(dataChanged()), this, SLOT(clipBoardChange(bool)));
@@ -19,7 +19,7 @@ Network_Class::Network_Class(const QUrl &Url) {
     }
 
     this->m_clsIsInit = true;
-
+    this->m_operator_Mutex = true;
     this->m_url->setHost(Url.host());
     this->m_url->setPort(Url.port());
     this->m_url->setPassword(Url.password());
@@ -37,7 +37,7 @@ Network_Class::Network_Class(QUrl *url) {
     }
 
     this->m_clsIsInit = true;
-
+    this->m_operator_Mutex = true;
     this->m_url = url;
     this->m_ThreadStartFlag = false;
 
@@ -47,40 +47,50 @@ Network_Class::Network_Class(QUrl *url) {
 }
 
 bool Network_Class::finished_of_Upload(QNetworkReply *ftp_reply) {
-    if (ftp_reply->isRunning()) {
+    while (!ftp_reply->isRunning()) {
         qDebug() << "its running";
-    } else if (ftp_reply->isFinished()) {
         //TODO: 同步粘贴板
-
-    } else {
-        qDebug() << "i don't know network status";
-        //this->changeUI();
     }
 
     return false;
 }
 
+bool Network_Class::finished_of_download(QNetworkReply *ftp_reply) {
+    while (!ftp_reply->isRunning()) {
+        ftp_reply->thread();
+    }
+}
+
 //TODO
 QString Network_Class::download_From_Server() {
-    this->m_reconnectTimes = 0;
+    while (this->m_operator_Mutex) {
+        this->m_operator_Mutex = false;
+        this->m_reconnectTimes = 0;
 
-    QString rcvBuf = "";
+        QString rcvBuf = "";
+        rcvBuf = this->sync(*(this->m_url));
+        this->sync(*(this->m_url));
 
-    rcvBuf = this->sync(*(this->m_url));
-
+    }
+    this->m_operator_Mutex = true;
     return "";
 }
 
 //TODO
 bool Network_Class::upload_to_Server() {
-    QString content = this->m_file_class->getClipBoard()->text();
-    if (this->m_file_class->append2File(content)) {
-        this->m_file_class->getFile()->close();
-        this->send(content, *(this->m_url));
-        return true;
-    } else {
-        qDebug() << "追加文件错误";
-        return false;
+    while (this->m_operator_Mutex) {
+        this->m_operator_Mutex = false;
+        QString content = this->m_file_class->getClipBoard()->text();
+        if (this->m_file_class->append2File(content)) {
+            this->m_file_class->getFile()->close();
+            this->send(content, *(this->m_url));
+            this->m_operator_Mutex = true;
+            return true;
+        } else {
+            qDebug() << "追加文件错误";
+            this->m_operator_Mutex = true;
+            return false;
+        }
     }
 }
 
@@ -186,7 +196,7 @@ bool Network_Class::clipBoardChange(bool status) {
     this->m_cbChange = ~this->m_cbChange;
 }
 
-QString Network_Class::sync(const QUrl &url) {
+bool Network_Class::sync(const QUrl &url) {
 
     QNetworkAccessManager *FtpManager = this->getInstance();
 
@@ -194,10 +204,28 @@ QString Network_Class::sync(const QUrl &url) {
 
     this->m_reply = FtpManager->get(request);
 
+    connect(this->m_reply, SIGNAL(QNetworkReply::readyRead()), this, SLOT(getFTPContent()));
     connect(this->m_reply, SIGNAL(error(QNetworkReply::NetworkError)), this,
             SLOT(replyError(QNetworkReply::NetworkError)));
     connect(FtpManager, SIGNAL(finished(QNetworkReply * )), this, SLOT(finished_of_download(QNetworkReply * )));
+    return true;
+}
+
+QString Network_Class::getFTPContent() {
+    QByteArray ftpContent = this->m_reply->readAll();
+    QString rcvBuf = ftpContent;
+
+    if (this->m_swpBuf == rcvBuf) {
+        return {};
+    } else {
+        this->m_swpBuf = rcvBuf;
+        this->m_file_class->getClipBoard()->setText(rcvBuf);
+        this->m_file_class->append2File(rcvBuf);
+        //TODO 发给mainwindow
+    }
 
 }
+
+
 
 

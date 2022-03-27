@@ -224,3 +224,7 @@ void MainWindow::showUI() {
 
 }
 
+void MainWindow::getRcvBuf(QString &) {
+
+}
+

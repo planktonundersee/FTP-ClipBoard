@@ -5,6 +5,7 @@
 
 #include <QUrl>
 #include <QDebug>
+#include <QByteArray>
 #include <QThread>
 #include <QListWidgetItem>
 #include <QClipboard>
@@ -53,6 +54,8 @@ public slots:
 
     bool clipBoardChange(bool status);
 
+    QString getFTPContent();
+
 signals:
 
 private:
@@ -60,7 +63,7 @@ private:
 
     bool send(const QString &SndStr2Serv, const QUrl &url);
 
-    QString sync(const QUrl &url);
+    bool sync(const QUrl &url);
 
     bool isInit();
 
