@@ -94,9 +94,9 @@ QClipboard *File_Class::getClipBoard() {
 //0000000036表示此帧总长为36
 //11表示后面的内容有11个字符
 QString File_Class::generateMessage(QString &str) {
-    long long int content = str.length();
     std::stringstream message;
     message << "Message&&"; //0000000000&&
+    long long int content = str.length();
     int content_length = Pubilc_Func::calculate_dec_Bit(content);
     message << content_length;
 }
