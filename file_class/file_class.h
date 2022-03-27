@@ -22,7 +22,7 @@ Q_OBJECT
 public slots:
 
     //追加文件内容
-    bool append2File(const QString &str);
+    bool append2File(QString &str);
 
 
 signals:

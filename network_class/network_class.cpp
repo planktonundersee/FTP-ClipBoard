@@ -46,7 +46,7 @@ Network_Class::Network_Class(QUrl *url) {
     this->m_ThreadStartFlag = false;
 }
 
-bool Network_Class::finished_of_Reply(QNetworkReply *ftp_reply) {
+bool Network_Class::finished_of_Upload(QNetworkReply *ftp_reply) {
     if (ftp_reply->isRunning()) {
         qDebug() << "its running";
     } else if (ftp_reply->isFinished()) {
@@ -61,17 +61,22 @@ bool Network_Class::finished_of_Reply(QNetworkReply *ftp_reply) {
 }
 
 //TODO
-QString Network_Class::syncFrom_Server() {
+QString Network_Class::download_From_Server() {
     this->m_reconnectTimes = 0;
+
+    QString rcvBuf = "";
+
+    rcvBuf = this->sync(*(this->m_url));
+
     return "";
 }
 
 //TODO
-bool Network_Class::uploadto_Server() {
-    QString content = this->m_clipboard->text();
+bool Network_Class::upload_to_Server() {
+    QString content = this->m_file_class->getClipBoard()->text();
     if (this->m_file_class->append2File(content)) {
         this->m_file_class->getFile()->close();
-        this->snd2ser(content, *(this->m_url));
+        this->send(content, *(this->m_url));
         return true;
     } else {
         qDebug() << "追加文件错误";
@@ -85,12 +90,12 @@ bool Network_Class::uploadto_Server() {
         exit(0);
     }
 
+    //放到槽函数中,while(1)函数保证线程不结束
     while (true) {
         if (this->m_ThreadStatus == Status::THREAD_START) {
-            if ()
-                qDebug() << "Working";
-            //this->syncFrom_Server();
-            //this->uploadto_Server();
+            //if ()
+            qDebug() << "Working";
+
         } else if (this->m_ThreadStatus == Network_Class::Status::THREAD_STOP) {
             sleep(1);
             qDebug() << "Do Nothing...";
@@ -114,14 +119,12 @@ bool Network_Class::replyError(QNetworkReply::NetworkError) {
                    SLOT(replyError(QNetworkReply::NetworkError)));
     }
 
-    this->getUrl();
-    this->m_clipboard = QGuiApplication::clipboard();
-    QString clipBoard_str = this->m_clipboard->text();
-    this->snd2ser(clipBoard_str, *(this->m_url));
+    QString clipBoard_str = this->m_file_class->getClipBoard()->text();
+    this->send(clipBoard_str, *(this->m_url));
     return true;
 }
 
-bool Network_Class::snd2ser(const QString &SndStr2Serv, const QUrl &url) {
+bool Network_Class::send(const QString &SndStr2Serv, const QUrl &url) {
     if (url.isEmpty()) {
         return false;
     }
@@ -130,15 +133,17 @@ bool Network_Class::snd2ser(const QString &SndStr2Serv, const QUrl &url) {
 
     QNetworkRequest request(url);
     QByteArray sndStr = SndStr2Serv.toLatin1();
+
     if (sndStr.isEmpty()) {
         qDebug() << "Read File Content Fail";
         return false;
     }
 
     this->m_reply = FtpManager->put(request, sndStr);
+
     connect(this->m_reply, SIGNAL(error(QNetworkReply::NetworkError)), this,
             SLOT(replyError(QNetworkReply::NetworkError)));
-    connect(FtpManager, SIGNAL(finished(QNetworkReply * )), this, SLOT(finished_Of_Reply(QNetworkReply * )));
+    connect(FtpManager, SIGNAL(finished(QNetworkReply * )), this, SLOT(finished_of_Upload(QNetworkReply * )));
 }
 
 //单例模式?
@@ -179,6 +184,20 @@ void Network_Class::setUrl(const QUrl &url) {
 
 bool Network_Class::clipBoardChange(bool status) {
     this->m_cbChange = ~this->m_cbChange;
+}
+
+QString Network_Class::sync(const QUrl &url) {
+
+    QNetworkAccessManager *FtpManager = this->getInstance();
+
+    QNetworkRequest request(*(this->m_url));
+
+    this->m_reply = FtpManager->get(request);
+
+    connect(this->m_reply, SIGNAL(error(QNetworkReply::NetworkError)), this,
+            SLOT(replyError(QNetworkReply::NetworkError)));
+    connect(FtpManager, SIGNAL(finished(QNetworkReply * )), this, SLOT(finished_of_download(QNetworkReply * )));
+
 }
 
 

@@ -49,7 +49,7 @@ QByteArray File_Class::getFileContent() {
     return sndStr;
 }
 
-bool File_Class::append2File(const QString &str) {
+bool File_Class::append2File(QString &str) {
     QString Fpath = QApplication::applicationDirPath();
     this->m_file = new QFile(Fpath);
     this->m_file->setFileName(Fpath + "/ClipBorad.txt");

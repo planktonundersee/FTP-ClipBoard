@@ -31,12 +31,7 @@ public:
 
     [[noreturn]] void run() override;
 
-    bool isInit();
-
-    QString syncFrom_Server();
-
     //QString 上次到服务器
-    bool uploadto_Server();
 
     void setUrl(const QUrl &url);
 
@@ -44,12 +39,15 @@ public:
 
 public slots:
 
+    bool upload_to_Server();
+
+    QString download_From_Server();
 
     bool replyError(QNetworkReply::NetworkError);
 
-    bool finished_of_Reply(QNetworkReply *);
+    bool finished_of_Upload(QNetworkReply *);
 
-    bool snd2ser(const QString &SndStr2Serv, const QUrl &url);
+    bool finished_of_download(QNetworkReply *);
 
     void changeThreadStatus(bool Status);
 
@@ -60,19 +58,24 @@ signals:
 private:
     QNetworkAccessManager *getInstance();
 
+    bool send(const QString &SndStr2Serv, const QUrl &url);
+
+    QString sync(const QUrl &url);
+
+    bool isInit();
+
 private:
     QUrl *m_url{};
-    bool m_clsIsInit;
-    bool m_cbChange;
-    bool m_ThreadStartFlag;
-    bool m_ThreadStatus{};
-    int m_reconnectTimes{};
-    QNetworkReply *m_reply{};
-    File_Class *m_file_class{};
-    QClipboard *m_clipboard{};
-    QNetworkAccessManager *m_manager{};
+    QString m_swpBuf;                       //用于去除重复上下载操作
+    bool m_operator_Mutex;                 //上下载操作锁   TODO 其他的上下载操作放入队列中
+    bool m_cbChange;                        //判断粘贴板内容改变
+    bool m_clsIsInit;                       //本类是否被初始化过
+    bool m_ThreadStatus{};                  //线程状态
+    bool m_ThreadStartFlag;                 //用于开关线程
+    int m_reconnectTimes{};                 //重连次数
+    QNetworkReply *m_reply{};               //应答类
+    File_Class *m_file_class{};             //文件管理
+    QNetworkAccessManager *m_manager{};     //网络请求类
 };
 
 #endif // NETWORK_CLASS_H
-
-#pragma clang diagnostic pop
