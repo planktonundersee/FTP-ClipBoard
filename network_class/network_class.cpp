@@ -1,5 +1,6 @@
 #include "network_class.h"
 
+//todo 简化信号与槽。emit 一个信号，根据不同值执行不同内容
 Network_Class::Network_Class() {
     if (this->m_clsIsInit) {
         return;
@@ -27,6 +28,7 @@ Network_Class::Network_Class(const QUrl &Url) {
     this->m_url->setScheme(Url.scheme());
 
     connect(this->m_file_class, SIGNAL(dataChanged()), this, SLOT(clipBoardChange(bool)));
+    connect(this, SIGNAL(sendBuftoFileClass(QString & )), this->m_file_class, SLOT());
 
     this->m_ThreadStartFlag = false;
 }
@@ -221,7 +223,9 @@ QString Network_Class::getFTPContent() {
         this->m_swpBuf = rcvBuf;
         this->m_file_class->getClipBoard()->setText(rcvBuf);
         this->m_file_class->append2File(rcvBuf);
-        //TODO 发给mainwindow
+
+        // 发给mainwindow
+        emit sendBuftoMainWindow(rcvBuf);
     }
 
 }

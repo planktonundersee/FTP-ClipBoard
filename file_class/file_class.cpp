@@ -113,7 +113,7 @@ QString File_Class::generateMessage(QString &str) {
     msgLenBit = Pubilc_Func::calculate_dec_Bit(msgLen);
 
     //拼凑报文
-    message << "%%Message&&" << CurrentTime << "&&" << content_bit << "&&" << msglenBit << "::" << str.toStdString();
+    message << "%%Message&&" << CurrentTime << "&&" << content_bit << "&&" << msgLenBit << "::" << str.toStdString();
 
     //stringstream转std::string
     std::string retStr;

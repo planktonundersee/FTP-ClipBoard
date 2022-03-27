@@ -58,6 +58,10 @@ public slots:
 
 signals:
 
+    void sendBuftoMainWindow(QString &);
+
+    void sendBuftoFileClass(QString &);
+
 private:
     QNetworkAccessManager *getInstance();
 
@@ -70,7 +74,7 @@ private:
 private:
     QUrl *m_url{};
     QString m_swpBuf;                       //用于去除重复上下载操作
-    bool m_operator_Mutex;                 //上下载操作锁   TODO 其他的上下载操作放入队列中
+    bool m_operator_Mutex;                  //上下载操作锁   TODO 其他的上下载操作放入队列中
     bool m_cbChange;                        //判断粘贴板内容改变
     bool m_clsIsInit;                       //本类是否被初始化过
     bool m_ThreadStatus{};                  //线程状态

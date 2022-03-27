@@ -24,7 +24,6 @@ public slots:
     //追加文件内容
     bool append2File(QString &str);
 
-
 signals:
 
     //发送给network_class，用于检测粘贴板是否更新
