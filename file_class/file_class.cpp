@@ -89,16 +89,23 @@ QClipboard *File_Class::getClipBoard() {
 }
 
 //根据传入的数据生成帧
-//Message&&0000000036&&11::xxxxxxxxxxx
-//以Message打头，&& 为分隔符, ::表示报文结束
-//0000000036表示此帧总长为36
+//%%Message&&2022/03/27 12:26:23 sun&&11&&47&&58::xxxxxxxxxxx
+//%%表示新一帧开始, 以Message表示是报文，&& 为分隔符, ::表示报文结束。
+//表示报文头长47
+//58表示此帧总长为58
 //11表示后面的内容有11个字符
 QString File_Class::generateMessage(QString &str) {
-    long long int content = str.length();
     std::stringstream message;
-    message << "Message&&"; //0000000000&&
-    int content_length = Pubilc_Func::calculate_dec_Bit(content);
-    message << content_length;
+
+    long long int content = str.length();
+    int the_length_of_content = Pubilc_Func::calculate_dec_Bit(content);
+
+    std::string CurrentTime = Pubilc_Func::getCurrentTime();
+
+    int msgLen = 36 + the_length_of_content + 4;
+    message << "%%Message&&" << CurrentTime << "&&" << the_length_of_content << "&&";
+
+
 }
 
 
