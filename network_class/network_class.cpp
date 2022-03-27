@@ -1,6 +1,7 @@
 #include "network_class.h"
 
 //todo 简化信号与槽。emit 一个信号，根据不同值执行不同内容
+
 Network_Class::Network_Class() {
     if (this->m_clsIsInit) {
         return;
