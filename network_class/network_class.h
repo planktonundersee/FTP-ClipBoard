@@ -58,9 +58,13 @@ public slots:
 
 signals:
 
-    void sendBuftoMainWindow(QString &);
-
-    void sendBuftoFileClass(QString &);
+    void sendSignal(emit_bundle &emitBundle);
+    
+    //a 表示操作数，
+    //
+//    void sendBuftoMainWindow(QString &);
+//
+//    void sendBuftoFileClass(QString &);
 
 private:
     QNetworkAccessManager *getInstance();

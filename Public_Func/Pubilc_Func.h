@@ -4,6 +4,7 @@
 
 #include <string>
 
+#include <QString>
 #include <QDateTime>
 
 #ifndef FTP_CLIPBOARD_PUBILC_FUNC_H
@@ -16,6 +17,14 @@ public:
 
     static std::string getCurrentTime();
 
+};
+
+//只用于发送信号使用
+template<typename T>
+struct emit_bundle
+{
+    int operator_num;               //对该类进行什么操作
+    T template_Class;               //将类序列化存入QString
 };
 
 
