@@ -27,5 +27,4 @@ struct __attribute__((unused)) emit_bundle
     __attribute__((unused)) T template_Class;               //将类序列化存入QString
 };
 
-
 #endif //FTP_CLIPBOARD_PUBILC_FUNC_H
