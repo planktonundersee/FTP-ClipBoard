@@ -11,7 +11,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets network REQUIRED)
+find_package(QT NAMES Qt6 COMPONENTS Widgets network REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets network REQUIRED)
 
 set(PROJECT_SOURCES
@@ -27,7 +27,7 @@ set(PROJECT_SOURCES
         Public_Func/Pubilc_Func.cpp Public_Func/Pubilc_Func.h)
 
 if (${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(FTP-ClipBorad
+    qt_add_executable(FTP-ClipBoard
             MANUAL_FINALIZATION
             ${PROJECT_SOURCES}
             )

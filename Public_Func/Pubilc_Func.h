@@ -21,10 +21,10 @@ public:
 
 //只用于发送信号使用
 template<typename T>
-struct __attribute__((unused)) emit_bundle
+struct emit_bundle
 {
-    __attribute__((unused)) int operator_num;               //对该类进行什么操作
-    __attribute__((unused)) T template_Class;               //将类序列化存入QString
+    int operator_num;               //对该类进行什么操作
+    T template_Class;               //将类序列化存入QString
 };
 
 #endif //FTP_CLIPBOARD_PUBILC_FUNC_H
