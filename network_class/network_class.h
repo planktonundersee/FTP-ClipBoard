@@ -1,4 +1,6 @@
 #pragma clang diagnostic push
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "NotImplementedFunctions"
 #pragma ide diagnostic ignored "google-explicit-constructor"
 #ifndef NETWORK_CLASS_H
 #define NETWORK_CLASS_H
@@ -30,9 +32,7 @@ public:
 
     Network_Class(QUrl *url);
 
-    [[noreturn]] void run() override;
-
-    //QString 上次到服务器
+    void run() override;
 
     void setUrl(const QUrl &url);
 
@@ -58,7 +58,8 @@ public slots:
 
 signals:
 
-    void sendSignal(emit_bundle &emitBundle);
+    template<typename T>
+    void sendSignal(emit_bundle<T> &emitBundle);
     
     //a 表示操作数，
     //
@@ -90,3 +91,4 @@ private:
 };
 
 #endif // NETWORK_CLASS_H
+#pragma clang diagnostic pop

@@ -2,3 +2,4 @@
 /.idea/
 /cmake-build-relwithdebinfo-mingw_900_64/
 /cmake-build-relwithdebinfo-mingw-qt/
+/build/

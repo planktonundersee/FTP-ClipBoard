@@ -2,6 +2,8 @@
 
 //todo 简化信号与槽。emit 一个信号，根据不同值执行不同内容
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "ConstantFunctionResult"
 Network_Class::Network_Class() {
     if (this->m_clsIsInit) {
         return;
@@ -97,10 +99,10 @@ bool Network_Class::upload_to_Server() {
     }
 }
 
-[[noreturn]] void Network_Class::run() {
+void Network_Class::run() {
     if (!this->isInit()) {
         qDebug() << "还未初始化";
-        exit(0);
+        return ;
     }
 
     //放到槽函数中,while(1)函数保证线程不结束
@@ -116,6 +118,7 @@ bool Network_Class::upload_to_Server() {
             sleep(1);
             qDebug() << "Other Thread Status";
         }
+        return ;
     }
 }
 
@@ -157,6 +160,7 @@ bool Network_Class::send(const QString &SndStr2Serv, const QUrl &url) {
     connect(this->m_reply, SIGNAL(error(QNetworkReply::NetworkError)), this,
             SLOT(replyError(QNetworkReply::NetworkError)));
     connect(FtpManager, SIGNAL(finished(QNetworkReply * )), this, SLOT(finished_of_Upload(QNetworkReply * )));
+    return true;
 }
 
 //单例模式?
@@ -197,6 +201,7 @@ void Network_Class::setUrl(const QUrl &url) {
 
 bool Network_Class::clipBoardChange(bool status) {
     this->m_cbChange = ~this->m_cbChange;
+    return true;
 }
 
 bool Network_Class::sync(const QUrl &url) {
@@ -210,7 +215,7 @@ bool Network_Class::sync(const QUrl &url) {
     connect(this->m_reply, SIGNAL(QNetworkReply::readyRead()), this, SLOT(getFTPContent()));
     connect(this->m_reply, SIGNAL(error(QNetworkReply::NetworkError)), this,
             SLOT(replyError(QNetworkReply::NetworkError)));
-    connect(FtpManager, SIGNAL(finished(QNetworkReply * )), this, SLOT(finished_of_download(QNetworkReply * )));
+    connect(FtpManager, SIGNAL(finished(QNetworkReply * )), this, SLOT(finished_of_download(QNetworkReply * )));// clazy:exclude=connect-not-normalized
     return true;
 }
 
@@ -225,12 +230,15 @@ QString Network_Class::getFTPContent() {
         this->m_file_class->getClipBoard()->setText(rcvBuf);
         this->m_file_class->append2File(rcvBuf);
 
-        // 发给mainwindow
-        emit sendBuftoMainWindow(rcvBuf);
+        // 发给mainWindow
+        emit_bundle<QString> getRcvBuf;
+        emit sendSignal(getRcvBuf);
     }
-
+    return {};
 }
 
 
 
 
+
+#pragma clang diagnostic pop
