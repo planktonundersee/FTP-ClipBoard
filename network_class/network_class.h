@@ -76,6 +76,7 @@ private:
 
     bool isInit();
 
+
 private:
     QUrl *m_url{};
     QString m_swpBuf;                       //用于去除重复上下载操作
