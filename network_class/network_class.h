@@ -1,6 +1,4 @@
 #pragma clang diagnostic push
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "NotImplementedFunctions"
 #pragma ide diagnostic ignored "google-explicit-constructor"
 #ifndef NETWORK_CLASS_H
 #define NETWORK_CLASS_H
@@ -28,11 +26,13 @@ public:
 
     Network_Class();
 
-    Network_Class(const QUrl &Url);
+    Network_Class(const QUrl &url);
 
     Network_Class(QUrl *url);
 
-    void run() override;
+    [[noreturn]] void run() override;
+
+    //QString 上次到服务器
 
     void setUrl(const QUrl &url);
 
@@ -40,48 +40,44 @@ public:
 
 public slots:
 
-    bool upload_to_Server();
+    bool uploadToServer();
 
-    QString download_From_Server();
+    QString downloadFromServer();
 
     bool replyError(QNetworkReply::NetworkError);
 
-    bool finished_of_Upload(QNetworkReply *);
+    bool finishedOfUpload(QNetworkReply *ftpReply);
 
-    bool finished_of_download(QNetworkReply *);
+    bool finishedOfDownload(QNetworkReply *ftpReply);
 
-    void changeThreadStatus(bool Status);
+    void changeThreadStatus(bool status);
 
     bool clipBoardChange(bool status);
 
-    QString getFTPContent();
+    QString getFtpContent();
+
+    template<typename T>
+    void getRcvBuf(emit_Bundle<T>);
 
 signals:
 
     template<typename T>
-    void sendSignal(emit_bundle<T> &emitBundle);
-    
-    //a 表示操作数，
-    //
-//    void sendBuftoMainWindow(QString &);
-//
-//    void sendBuftoFileClass(QString &);
+    void sendSignal(emit_Bundle<T> &emitBundle);
 
 private:
     QNetworkAccessManager *getInstance();
 
-    bool send(const QString &SndStr2Serv, const QUrl &url);
+    bool send(const QString &sndStr2Serv, const QUrl &url);
 
     bool sync(const QUrl &url);
 
     bool isInit();
 
-
 private:
     QUrl *m_url{};
     QString m_swpBuf;                       //用于去除重复上下载操作
     bool m_operator_Mutex;                  //上下载操作锁   TODO 其他的上下载操作放入队列中
-    bool m_cbChange;                        //判断粘贴板内容改变
+    bool m_cbChange{};                        //判断粘贴板内容改变
     bool m_clsIsInit;                       //本类是否被初始化过
     bool m_ThreadStatus{};                  //线程状态
     bool m_ThreadStartFlag;                 //用于开关线程
@@ -92,4 +88,3 @@ private:
 };
 
 #endif // NETWORK_CLASS_H
-#pragma clang diagnostic pop

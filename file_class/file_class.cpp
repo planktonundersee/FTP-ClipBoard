@@ -2,13 +2,13 @@
 #include <sstream>
 #include "file_class.h"
 
-File_Class::File_Class(const QFileInfo &File_Info) {
+File_Class::File_Class(const QFileInfo &fileInfo) {
     this->m_cbContent = new QString();
     //初始化
-    if (!this->CreateFile(File_Info)) {
+    if (!this->createFile(fileInfo)) {
         return;
     }
-    connect(this, SIGNAL(changeFile(const QString&)), this, SLOT(append2File(const QString&)));
+    connect(this, SIGNAL(changeFile(const QString&)), this, SLOT(append2File(const QString&)));// clazy:exclude=connect-not-normalized
 }
 
 File_Class::~File_Class() {
@@ -16,15 +16,15 @@ File_Class::~File_Class() {
     delete this->m_cbContent;
 }
 
-bool File_Class::CreateFile(const QFileInfo &File_Info) {
-    if (File_Info.isDir()) {
+bool File_Class::createFile(const QFileInfo &fileInfo) {
+    if (fileInfo.isDir()) {
         qDebug() << "Path String Is A Directory";
         return false;
     }
 
     qDebug() << "File Path : " << this->m_file->fileName();
 
-    if (File_Info.isFile()) {
+    if (fileInfo.isFile()) {
         this->m_file->open(QIODevice::ReadWrite);
         return true;
     } else {
@@ -54,7 +54,7 @@ bool File_Class::append2File(QString &str) {
     this->m_file = new QFile(Fpath);
     this->m_file->setFileName(Fpath + "/ClipBorad.txt");
     QFileInfo File_Info(this->m_file->fileName());
-    if (!this->CreateFile(File_Info)) {
+    if (!this->createFile(File_Info)) {
         return false;
     }
 
@@ -79,7 +79,7 @@ QClipboard *File_Class::getClipBoard() {
 [[noreturn]] void File_Class::run() {
     while (true) {
         QString content = this->m_ClipBoard->text();
-        if (this->m_cbContent == content) {
+        if (*this->m_cbContent == content) {
             //do nothing
         } else {
             emit this->dataChanged();
@@ -99,21 +99,21 @@ QString File_Class::generateMessage(QString &str) {
 
     //计算真正的内容才长度
     long long int content = str.length();
-    int content_bit = Pubilc_Func::calculate_dec_Bit(content);
+    int contentBit = Pubilc_Func::calculate_Dec_Bit(content);
 
     //拿到当前时间
     std::string CurrentTime = Pubilc_Func::getCurrentTime();
 
     //去除报文和总长的长度
-    int msgLen = 36 + content_bit + 4;
+    int msgLen = 36 + contentBit + 4;
 
     //msgLen的长度
-    int msgLenBit = Pubilc_Func::calculate_dec_Bit(msgLen);
+    int msgLenBit = Pubilc_Func::calculate_Dec_Bit(msgLen);
     msgLen += msgLenBit;
-    msgLenBit = Pubilc_Func::calculate_dec_Bit(msgLen);
+    msgLenBit = Pubilc_Func::calculate_Dec_Bit(msgLen);
 
     //拼凑报文
-    message << "%%Message&&" << CurrentTime << "&&" << content_bit << "&&" << msgLenBit << "::" << str.toStdString();
+    message << "%%Message&&" << CurrentTime << "&&" << contentBit << "&&" << msgLenBit << "::" << str.toStdString();
 
     //stringstream转std::string
     std::string retStr;

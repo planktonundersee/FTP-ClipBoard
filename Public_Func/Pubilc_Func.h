@@ -13,7 +13,8 @@
 
 class Pubilc_Func {
 public:
-    static int calculate_dec_Bit(long long int);
+
+    static int calculate_Dec_Bit(long long int);
 
     static std::string getCurrentTime();
 
@@ -21,7 +22,7 @@ public:
 
 //只用于发送信号使用
 template<typename T>
-struct emit_bundle
+struct emit_Bundle
 {
     int operator_num;               //对该类进行什么操作
     T template_Class;               //将类序列化存入QString

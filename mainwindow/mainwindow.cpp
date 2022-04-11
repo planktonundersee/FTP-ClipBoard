@@ -33,9 +33,7 @@ void MainWindow::on_pushButton_clicked(bool checked) {
         this->m_DownloadFlag = true;
         this->m_ui->pushButton->setText("开启同步");
         this->m_Url = this->setUrl();
-        this->changeUI();
-//        QString ClipBoardStr;
-//        ClipBoardStr = this->m_ClipBoard->text();
+        this->changeUi();
         //启动线程
         this->m_Network->setUrl(this->setUrl());
         this->m_Network->start();
@@ -46,7 +44,7 @@ void MainWindow::on_pushButton_clicked(bool checked) {
         this->m_UploadFlag = false;
         this->m_DownloadFlag = false;
         this->m_ui->pushButton->setText("暂停同步");
-        this->changeUI();
+        this->changeUi();
         emit this->threadStatus(Network_Class::Status::THREAD_STOP);
         //结束线程
     }
@@ -56,14 +54,15 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     if ((event->modifiers() == Qt::ControlModifier) && (event->key() == Qt::Key_C)) {
         if (this->m_UploadFlag) {
             //TODO
-            //this->uploadServer();
+            emit_Bundle<int> sendClass;
+            sendClass.operator_num = 1;
+            emit sendSignal(sendClass);
         }
 
     }
-    if ((event->modifiers() == Qt::ControlModifier) && (event->key()) == Qt::Key_V) {
+    if ((event->modifiers() == Qt::ControlModifier) && (event->modifiers() == Qt::ShiftModifier) && (event->key()) == Qt::Key_V) {
         if (this->m_DownloadFlag) {
             //TODO
-            //this->syncFromServer();
         }
     }
 }
@@ -78,12 +77,12 @@ Network_Class *MainWindow::getInstance() {
     }
 }
 
-void MainWindow::changeUI() {
+void MainWindow::changeUi() {
     if (this->m_Hide_UI) {
-        this->showUI();
+        this->showUi();
         this->m_Hide_UI = false;
     } else {
-        this->hideUI();
+        this->hideUi();
         this->m_Hide_UI = true;
     }
 }
@@ -91,18 +90,6 @@ void MainWindow::changeUI() {
 //双击复制
 void MainWindow::on_listWidget_itemDoubleClicked(QListWidgetItem *item) {
     this->m_ClipBoard->setText(item->text());
-}
-
-QString MainWindow::convert2UTF8(const QString &str, const QString &charType) {
-    QTextCodec *codeC = QTextCodec::codecForName("UTF-8");
-    QTextCodec::ConverterState state;
-    QByteArray qba;
-    QString temp;
-    temp = codeC->toUnicode(str.toLatin1().constData(), str.size(), &state);
-    if (state.invalidChars > 0) {
-        temp = QTextCodec::codecForName("UTF-8")->toUnicode(qba);
-    }
-    return temp;
 }
 
 //顺序添加
@@ -118,7 +105,7 @@ void MainWindow::addListWidget() {
     }
     this->m_ui->listWidget->insertItem(0, listWidgetItem);
     qDebug() << "Upload Success";
-    this->changeUI();
+    this->changeUi();
 }
 
 //与别的文件不同步时，同步时使用
@@ -139,7 +126,7 @@ void MainWindow::insertListWidget(const QString &input, int row) {
     }
     this->m_ui->listWidget->insertItem(0, listWidgetItem);
     qDebug() << "Upload Success";
-    this->changeUI();
+    this->changeUi();
 }
 
 //差别较大时，刷新ListWidget
@@ -200,7 +187,7 @@ void MainWindow::setText() {
     this->m_ui->portEdit->setText("579");
 }
 
-void MainWindow::hideUI() {
+void MainWindow::hideUi() {
     this->m_ui->addrEdit->hide();
     this->m_ui->nameEdit->hide();
     this->m_ui->pawdEdit->hide();
@@ -211,7 +198,7 @@ void MainWindow::hideUI() {
     this->m_ui->portLabel->hide();
 }
 
-void MainWindow::showUI() {
+void MainWindow::showUi() {
     this->m_ui->addrEdit->show();
     this->m_ui->nameEdit->show();
     this->m_ui->pawdEdit->show();

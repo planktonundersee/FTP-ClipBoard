@@ -1,8 +1,11 @@
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunknown-pragmas"
+#pragma ide diagnostic ignored "cppcoreguidelines-pro-type-member-init"
+// clazy:excludeall=connect-not-normalized
 #include "network_class.h"
 
-//todo 简化信号与槽。emit 一个信号，根据不同值执行不同内容
-
 #pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Winvalid-noreturn"
 #pragma ide diagnostic ignored "ConstantFunctionResult"
 Network_Class::Network_Class() {
     if (this->m_clsIsInit) {
@@ -17,18 +20,19 @@ Network_Class::Network_Class() {
     this->m_ThreadStartFlag = false;
 }
 
-Network_Class::Network_Class(const QUrl &Url) {
+template<typename T>
+Network_Class::Network_Class(const QUrl &url) {
     if (this->m_clsIsInit) {
         return;
     }
 
     this->m_clsIsInit = true;
     this->m_operator_Mutex = true;
-    this->m_url->setHost(Url.host());
-    this->m_url->setPort(Url.port());
-    this->m_url->setPassword(Url.password());
-    this->m_url->setUserName(Url.userName());
-    this->m_url->setScheme(Url.scheme());
+    this->m_url->setHost(url.host());
+    this->m_url->setPort(url.port());
+    this->m_url->setPassword(url.password());
+    this->m_url->setUserName(url.userName());
+    this->m_url->setScheme(url.scheme());
 
     connect(this->m_file_class, SIGNAL(dataChanged()), this, SLOT(clipBoardChange(bool)));
     connect(this, SIGNAL(sendBuftoFileClass(QString & )), this->m_file_class, SLOT());
@@ -41,39 +45,41 @@ Network_Class::Network_Class(QUrl *url) {
         return;
     }
 
+    this->m_url = url;
     this->m_clsIsInit = true;
     this->m_operator_Mutex = true;
-    this->m_url = url;
     this->m_ThreadStartFlag = false;
 
     connect(this->m_file_class, SIGNAL(dataChanged()), this, SLOT(clipBoardChange(bool)));
+    connect(this, SIGNAL(sendSignal(emit_Bundle<T> &emitBundle)), this->m_file_class, SLOT(getRcvBuf(emit_Bundle<T>)));
 
     this->m_ThreadStartFlag = false;
 }
 
-bool Network_Class::finished_of_Upload(QNetworkReply *ftp_reply) {
-    while (!ftp_reply->isRunning()) {
+bool Network_Class::finishedOfUpload(QNetworkReply *ftpReply) {
+    while (!ftpReply->isRunning()) {
         qDebug() << "its running";
         //TODO: 同步粘贴板
+
     }
 
     return false;
 }
 
-bool Network_Class::finished_of_download(QNetworkReply *ftp_reply) {
-    while (!ftp_reply->isRunning()) {
-        ftp_reply->thread();
+bool Network_Class::finishedOfDownload(QNetworkReply *ftpReply) {
+    while (!ftpReply->isRunning()) {
+        ftpReply->thread();
     }
 }
 
 //TODO
-QString Network_Class::download_From_Server() {
+QString Network_Class::downloadFromServer() {
     while (this->m_operator_Mutex) {
         this->m_operator_Mutex = false;
         this->m_reconnectTimes = 0;
 
         QString rcvBuf = "";
-        rcvBuf = this->sync(*(this->m_url));
+
         this->sync(*(this->m_url));
 
     }
@@ -82,7 +88,7 @@ QString Network_Class::download_From_Server() {
 }
 
 //TODO
-bool Network_Class::upload_to_Server() {
+bool Network_Class::uploadToServer() {
     while (this->m_operator_Mutex) {
         this->m_operator_Mutex = false;
         QString content = this->m_file_class->getClipBoard()->text();
@@ -131,35 +137,34 @@ bool Network_Class::replyError(QNetworkReply::NetworkError) {
         qDebug() << "can't connect to server:" << this->m_url->host() << " : " << this->m_url->port();
 
         //TODO
-        disconnect(this->m_reply, SIGNAL(error(QNetworkReply::NetworkError)), this,
-                   SLOT(replyError(QNetworkReply::NetworkError)));
+        disconnect(this->m_reply, SIGNAL(error(QNetworkReply::NetworkError)), this,SLOT(replyError(QNetworkReply::NetworkError)));
     }
 
-    QString clipBoard_str = this->m_file_class->getClipBoard()->text();
-    this->send(clipBoard_str, *(this->m_url));
+    QString clipBoardStr = this->m_file_class->getClipBoard()->text();
+    this->send(clipBoardStr, *(this->m_url));
     return true;
 }
 
-bool Network_Class::send(const QString &SndStr2Serv, const QUrl &url) {
+bool Network_Class::send(const QString &sndStr2Serv, const QUrl &url) {
     if (url.isEmpty()) {
         return false;
     }
 
-    QNetworkAccessManager *FtpManager = this->getInstance();
+    QNetworkAccessManager *ftpManager = this->getInstance();
 
     QNetworkRequest request(url);
-    QByteArray sndStr = SndStr2Serv.toLatin1();
+    QByteArray sndStr = sndStr2Serv.toLatin1();
 
     if (sndStr.isEmpty()) {
         qDebug() << "Read File Content Fail";
         return false;
     }
 
-    this->m_reply = FtpManager->put(request, sndStr);
+    this->m_reply = ftpManager->put(request, sndStr);
 
     connect(this->m_reply, SIGNAL(error(QNetworkReply::NetworkError)), this,
             SLOT(replyError(QNetworkReply::NetworkError)));
-    connect(FtpManager, SIGNAL(finished(QNetworkReply * )), this, SLOT(finished_of_Upload(QNetworkReply * )));
+    connect(ftpManager, SIGNAL(finished(QNetworkReply * )), this, SLOT(finishedOfUpload(QNetworkReply * )));
     return true;
 }
 
@@ -183,8 +188,8 @@ bool Network_Class::isInit() {
     }
 }
 
-void Network_Class::changeThreadStatus(bool Status) {
-    this->m_ThreadStatus = Status;
+void Network_Class::changeThreadStatus(bool status) {
+    this->m_ThreadStatus = status;
 }
 
 void Network_Class::setUrl(QUrl *url) {
@@ -206,20 +211,19 @@ bool Network_Class::clipBoardChange(bool status) {
 
 bool Network_Class::sync(const QUrl &url) {
 
-    QNetworkAccessManager *FtpManager = this->getInstance();
+    QNetworkAccessManager *ftpManager = this->getInstance();
 
     QNetworkRequest request(*(this->m_url));
 
-    this->m_reply = FtpManager->get(request);
+    this->m_reply = ftpManager->get(request);
 
-    connect(this->m_reply, SIGNAL(QNetworkReply::readyRead()), this, SLOT(getFTPContent()));
-    connect(this->m_reply, SIGNAL(error(QNetworkReply::NetworkError)), this,
-            SLOT(replyError(QNetworkReply::NetworkError)));
-    connect(FtpManager, SIGNAL(finished(QNetworkReply * )), this, SLOT(finished_of_download(QNetworkReply * )));// clazy:exclude=connect-not-normalized
+    connect(this->m_reply, SIGNAL(QNetworkReply::readyRead()), this, SLOT(getFtpContent()));
+    connect(ftpManager, SIGNAL(finished(QNetworkReply * )), this, SLOT(finishedOfDownload(QNetworkReply * )));// clazy:exclude=connect-not-normalized
+    connect(this->m_reply, SIGNAL(error(QNetworkReply::NetworkError)), this,SLOT(replyError(QNetworkReply::NetworkError)));
     return true;
 }
 
-QString Network_Class::getFTPContent() {
+QString Network_Class::getFtpContent() {
     QByteArray ftpContent = this->m_reply->readAll();
     QString rcvBuf = ftpContent;
 
@@ -231,14 +235,25 @@ QString Network_Class::getFTPContent() {
         this->m_file_class->append2File(rcvBuf);
 
         // 发给mainWindow
-        emit_bundle<QString> getRcvBuf;
+        emit_Bundle<QString> getRcvBuf;
+        getRcvBuf.template_Class = rcvBuf;
         emit sendSignal(getRcvBuf);
     }
     return {};
 }
 
+//接受外部信号
+template<typename T>
+void Network_Class::getRcvBuf(emit_Bundle<T> rcvClass) {
+    if (rcvClass.operator_num == 1)
+    {
+        //TODO 上传操作
+    }
+    if(rcvClass.operator_num == 2)
+    {
+        //TODO 下载操作
+    }
+}
 
-
-
-
+#pragma clang diagnostic pop
 #pragma clang diagnostic pop

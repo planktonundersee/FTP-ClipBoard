@@ -24,6 +24,9 @@ public slots:
     //追加文件内容
     bool append2File(QString &str);
 
+    template<typename T>
+    void getRcvBuf(T);
+
 signals:
 
     //发送给network_class，用于检测粘贴板是否更新
@@ -34,12 +37,12 @@ signals:
 
 public:
 
-    File_Class(const QFileInfo &File_Info);
+    File_Class(const QFileInfo &fileInfo);
 
     ~File_Class();
 
     //创建本地的文件
-    bool CreateFile(const QFileInfo &File_Info);
+    bool createFile(const QFileInfo &fileInfo);
 
     //获取文件内容
     QByteArray getFileContent();
@@ -57,9 +60,9 @@ public:
     static QString generateMessage(QString &str);
 
 private:
-    QClipboard *m_ClipBoard{};
     QFile *m_file{};
     QString *m_cbContent;
+    QClipboard *m_ClipBoard{};
 };
 
 #endif // FILE_CLASS_H

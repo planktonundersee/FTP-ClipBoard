@@ -10,7 +10,6 @@
 #include <iostream>
 #include <QKeyEvent>
 #include <QFileInfo>
-#include <QTextCodec>
 #include <QClipboard>
 #include <QMainWindow>
 #include <QMessageBox>
@@ -18,6 +17,7 @@
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
 
+#include "Public_Func/Pubilc_Func.h"
 #include "network_class/network_class.h"
 
 QT_BEGIN_NAMESPACE
@@ -36,8 +36,10 @@ signals:
 
     void threadStatus(bool Status);
 
+    template<typename T>
+    void sendSignal(emit_Bundle<T> );
+
 public:
-    static QString convert2UTF8(const QString &str, const QString &charType = "GBK");
 
     QUrl *setUrl();
 
@@ -55,37 +57,38 @@ public:
 
     Network_Class *getInstance();
 
-    void changeUI();
+    void changeUi();
+
+    void hideUi();
+
+    void showUi();
 
 private slots:
 
-    void hideUI();
-
-    void showUI();
 
     void on_pushButton_clicked(bool checked);
 
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
 
-    void getRcvBuf(QString &);
+    template<typename T>
+    void getRcvBuf(T);
 
 private:
     void setText();
 
 private:
-    QUrl *m_Url{};                             //Url
+    QUrl *m_Url{};                          //Url
+    QFile *m_File{};                        //用于读取配置文件
     Ui::MainWindow *m_ui;                   //UI对象
     QNetworkReply *m_Reply{};               //网络应答
-    Network_Class *m_Network{};               //网络上下载
+    Network_Class *m_Network{};             //网络上下载
     QClipboard *m_ClipBoard{};              //获取系统粘贴板
-    QFile *m_File{};                        //用于读取配置文件
-    //QNetworkAccessManager *m_Manager{};   //网络管理；发请求
     QJsonObject m_JsonObj;                  //读取和解析配置文件
-    std::map<int, std::string> *m_record{};    //用于管理粘贴板的历史记录
+    bool m_Hide_UI;                         //
     bool m_DownloadFlag{};                  //
     bool m_UploadFlag{};                    //
-    bool m_Hide_UI;                         //
     unsigned int m_ReconnectTimes;          //重连次数
+    std::map<int, std::string> *m_record{}; //用于管理粘贴板的历史记录
 };
 
 #endif // MAINWINDOW_H
