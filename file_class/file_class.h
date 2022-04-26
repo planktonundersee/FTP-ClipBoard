@@ -1,5 +1,5 @@
-#ifndef FILE_CLASS_H
-#define FILE_CLASS_H
+#ifndef FTP_CLIPBOARD_FILE_CLASS_H
+#define FTP_CLIPBOARD_FILE_CLASS_H
 
 
 #include <string>
@@ -20,7 +20,6 @@ class File_Class : public QThread {
 Q_OBJECT
 
 public slots:
-
     //追加文件内容
     bool append2File(QString &str);
 
@@ -65,4 +64,4 @@ private:
     QClipboard *m_ClipBoard{};
 };
 
-#endif // FILE_CLASS_H
+#endif // FTP_CLIPBOARD_FILE_CLASS_H

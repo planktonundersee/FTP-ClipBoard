@@ -1,11 +1,11 @@
+#ifndef NETWORK_CLASS_H
+#define NETWORK_CLASS_H
 #pragma clang diagnostic push
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "OCInconsistentNamingInspection"
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "NotImplementedFunctions"
 #pragma ide diagnostic ignored "google-explicit-constructor"
-#ifndef NETWORK_CLASS_H
-#define NETWORK_CLASS_H
 
 #include <QUrl>
 #include <QDebug>

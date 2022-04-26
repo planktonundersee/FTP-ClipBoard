@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef FTP_CLIPBOARD_MAINWINDOW_H
+#define FTP_CLIPBOARD_MAINWINDOW_H
 
 #include <string>
 
@@ -91,4 +91,4 @@ private:
     std::map<int, std::string> *m_record{}; //用于管理粘贴板的历史记录
 };
 
-#endif // MAINWINDOW_H
+#endif // FTP_CLIPBOARD_MAINWINDOW_H
