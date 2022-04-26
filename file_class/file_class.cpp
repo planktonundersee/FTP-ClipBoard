@@ -50,11 +50,11 @@ QByteArray File_Class::getFileContent() {
 }
 
 bool File_Class::append2File(QString &str) {
-    QString Fpath = QApplication::applicationDirPath();
-    this->m_file = new QFile(Fpath);
-    this->m_file->setFileName(Fpath + "/ClipBorad.txt");
-    QFileInfo File_Info(this->m_file->fileName());
-    if (!this->createFile(File_Info)) {
+    QString fpath = QApplication::applicationDirPath();
+    this->m_file = new QFile(fpath);
+    this->m_file->setFileName(fpath + "/ClipBoard.txt");
+    QFileInfo fileInfo(this->m_file->fileName());
+    if (!this->createFile(fileInfo)) {
         return false;
     }
 
@@ -102,7 +102,7 @@ QString File_Class::generateMessage(QString &str) {
     int contentBit = Pubilc_Func::calculate_Dec_Bit(content);
 
     //拿到当前时间
-    std::string CurrentTime = Pubilc_Func::getCurrentTime();
+    std::string currentTime = Pubilc_Func::getCurrentTime();
 
     //去除报文和总长的长度
     int msgLen = 36 + contentBit + 4;
@@ -113,7 +113,7 @@ QString File_Class::generateMessage(QString &str) {
     msgLenBit = Pubilc_Func::calculate_Dec_Bit(msgLen);
 
     //拼凑报文
-    message << "%%Message&&" << CurrentTime << "&&" << contentBit << "&&" << msgLenBit << "::" << str.toStdString();
+    message << "%%Message&&" << currentTime << "&&" << contentBit << "&&" << msgLenBit << "::" << str.toStdString();
 
     //stringstream转std::string
     std::string retStr;

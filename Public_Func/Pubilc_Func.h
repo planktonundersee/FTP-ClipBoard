@@ -4,27 +4,28 @@
 #ifndef FTP_CLIPBOARD_PUBILC_FUNC_H
 #define FTP_CLIPBOARD_PUBILC_FUNC_H
 
-#include <QString>
+//#include <QString>
 #include <QDateTime>
 
 //只用于发送信号使用
-struct emit_Bundle
+typedef struct emit_Bundle
 {
     int operator_num;           //对该类进行什么操作
-    short thread_Name           //发给那个线程进行操作
+    short int thread_Name;          //发给那个线程进行操作
     QString template_Class;     //将类序列化存入QString
-};
+}emitBundle;
 
 class Pubilc_Func {
 public:
+    Pubilc_Func();
     static int calculate_Dec_Bit(long long int);
-
     static std::string getCurrentTime();
 
+public slots:
+    QString getRcvBuf(emitBundle& buf);
+
 signals:
-    void sendBuf(emit_Bundle& buf);
-slots:
-    static void getBuf();
+    void sendSignal(emitBundle& buf);
 };
 
 #endif //FTP_CLIPBOARD_PUBILC_FUNC_H

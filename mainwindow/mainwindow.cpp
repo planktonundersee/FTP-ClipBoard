@@ -5,7 +5,8 @@
 //NetWork 保活
 
 MainWindow::MainWindow(QWidget *parent)
-        : QMainWindow(parent), m_ui(new Ui::MainWindow) {
+        : QMainWindow(parent), m_ui(new Ui::MainWindow)
+{
     this->m_ui->setupUi(this);
     this->m_ui->pawdEdit->setEchoMode(QLineEdit::Password);
     this->m_ReconnectTimes = 0;
@@ -53,7 +54,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     if ((event->modifiers() == Qt::ControlModifier) && (event->key() == Qt::Key_C)) {
         if (this->m_UploadFlag) {
             //TODO
-            emit_Bundle<int> sendClass;
+            emitBundle sendClass;
             sendClass.operator_num = 1;
             emit sendSignal(sendClass);
         }

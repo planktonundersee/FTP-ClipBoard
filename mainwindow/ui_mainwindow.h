@@ -1,3 +1,5 @@
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "cppcoreguidelines-pro-type-member-init"
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
@@ -6,6 +8,8 @@
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCInconsistentNamingInspection"
 #ifndef FTP_CLIPBOARD_UI_MAINWINDOW_H
 #define FTP_CLIPBOARD_UI_MAINWINDOW_H
 
@@ -150,15 +154,18 @@ public:
             addrLabel->setText(QCoreApplication::translate("MainWindow", "\345\234\260\345\235\200 : ", nullptr));
             portLabel->setText(QCoreApplication::translate("MainWindow", "\347\253\257\345\217\243 : ", nullptr));
             pushButton->setText(QCoreApplication::translate("MainWindow", "\345\220\214\346\255\245", nullptr));
-    } // retranslateUi
+    } // reTranslateUi
 
 };
 
 namespace Ui {
-    class MainWindow : public Ui_MainWindow {
+    class MainWindow : public Ui_MainWindow{
     };
 } // namespace Ui
 
 QT_END_NAMESPACE
 
 #endif // FTP_CLIPBOARD_UI_MAINWINDOW_H
+
+#pragma clang diagnostic pop
+#pragma clang diagnostic pop

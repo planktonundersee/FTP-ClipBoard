@@ -18,7 +18,7 @@ networkClass::networkClass() {
     this->m_url = nullptr;
 
     connect(this->m_file_class, SIGNAL(dataChanged()), this, SLOT(clipBoardChange(bool)));
-    this->m_ThreadStartFlag = false;
+    this->m_ThreadStatus = false;
 }
 
 
@@ -38,7 +38,7 @@ networkClass::networkClass(const QUrl &url) {
     connect(this->m_file_class, SIGNAL(dataChanged()), this, SLOT(clipBoardChange(bool)));
     connect(this, SIGNAL(sendBuftoFileClass(QString & )), this->m_file_class, SLOT());
 
-    this->m_ThreadStartFlag = false;
+    this->m_ThreadStatus = false;
 }
 
 networkClass::networkClass(QUrl *url) {
@@ -49,12 +49,12 @@ networkClass::networkClass(QUrl *url) {
     this->m_url = url;
     this->m_clsIsInit = true;
     this->m_operator_Mutex = true;
-    this->m_ThreadStartFlag = false;
+    this->m_ThreadStatus = false;
 
     connect(this->m_file_class, SIGNAL(dataChanged()), this, SLOT(clipBoardChange(bool)));
     connect(this, SIGNAL(sendSignal(emit_Bundle<T> &emitBundle)), this->m_file_class, SLOT(getRcvBuf(emit_Bundle<T>)));
 
-    this->m_ThreadStartFlag = false;
+    this->m_ThreadStatus = false;
 }
 
 bool networkClass::finishedOfUpload(QNetworkReply *ftpReply) {
@@ -71,6 +71,7 @@ bool networkClass::finishedOfDownload(QNetworkReply *ftpReply) {
     while (!ftpReply->isRunning()) {
         ftpReply->thread();
     }
+    return true;
 }
 
 //TODO
@@ -104,12 +105,14 @@ bool networkClass::uploadToServer() {
             return false;
         }
     }
+    return true;
 }
 
 void networkClass::run() {
-    if (!this->isInit()) {
+    if (!this->isInit())
+    {
         qDebug() << "还未初始化";
-        return ;
+        exit(0);
     }
 
     //放到槽函数中,while(1)函数保证线程不结束
@@ -125,7 +128,7 @@ void networkClass::run() {
             sleep(1);
             qDebug() << "Other Thread status";
         }
-        return ;
+        exit(0);
     }
 }
 
@@ -236,7 +239,7 @@ QString networkClass::getFtpContent() {
         this->m_file_class->append2File(rcvBuf);
 
         // 发给mainWindow
-        emit_Bundle<QString> getRcvBuf;
+        emit_Bundle getRcvBuf;
         getRcvBuf.template_Class = rcvBuf;
         emit sendSignal(getRcvBuf);
     }
@@ -244,16 +247,20 @@ QString networkClass::getFtpContent() {
 }
 
 //接受外部信号
-template<typename T>
-void networkClass::getRcvBuf(emit_Bundle<T> rcvClass) {
-    if (rcvClass.operator_num == 1)
+//接受外部信号
+QString networkClass::getRcvBuf(emitBundle& buf)
+{
+    if (buf.operator_num == 1)
     {
         //TODO 上传操作
+        return {};
     }
-    if(rcvClass.operator_num == 2)
+    if(buf.operator_num == 2)
     {
         //TODO 下载操作
+        return {};
     }
+    return {};
 }
 
 

@@ -19,11 +19,13 @@
 
 #include "file_class/file_class.h"
 
-class networkClass : public QThread {
-Q_OBJECT
+class networkClass : public QThread ,public Pubilc_Func
+{
+    Q_OBJECT
 
+signals:
+    void sendSignal(emitBundle& buf);
 public:
-
     enum status {
         THREAD_START, THREAD_STOP
     };
@@ -43,6 +45,7 @@ public:
     void setUrl(QUrl *url);
 
 public slots:
+    QString getRcvBuf(emitBundle &buf);
 
     bool uploadToServer();
 
@@ -60,13 +63,7 @@ public slots:
 
     QString getFtpContent();
 
-    template<typename T>
-    void getRcvBuf(emit_Bundle<T>);
 
-signals:
-
-    template<class T>
-    void sendSignal(emit_Bundle<T> &emitBundle);
 
 private:
     QNetworkAccessManager *getInstance();

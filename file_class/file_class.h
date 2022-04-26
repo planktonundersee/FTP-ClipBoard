@@ -1,9 +1,11 @@
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCInconsistentNamingInspection"
 #ifndef FTP_CLIPBOARD_FILE_CLASS_H
 #define FTP_CLIPBOARD_FILE_CLASS_H
 
 
 #include <string>
-#include <strstream>
+//#include <strstream>
 
 #include <QFile>
 #include <QDebug>
@@ -23,8 +25,7 @@ public slots:
     //追加文件内容
     bool append2File(QString &str);
 
-    template<typename T>
-    void getRcvBuf(T);
+    virtual void getRcvBuf(emitBundle& buf) = 0;
 
 signals:
 
@@ -65,3 +66,5 @@ private:
 };
 
 #endif // FTP_CLIPBOARD_FILE_CLASS_H
+
+#pragma clang diagnostic pop

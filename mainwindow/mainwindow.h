@@ -1,3 +1,6 @@
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunknown-pragmas"
+#pragma ide diagnostic ignored "OCInconsistentNamingInspection"
 #ifndef FTP_CLIPBOARD_MAINWINDOW_H
 #define FTP_CLIPBOARD_MAINWINDOW_H
 
@@ -21,10 +24,10 @@
 #include "network_class/network_class.h"
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
+namespace Ui { class MainWindow;}
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow {
+class MainWindow : public QMainWindow, public Pubilc_Func{
 Q_OBJECT
 
 public:
@@ -32,12 +35,13 @@ public:
 
     ~MainWindow() override;
 
+public slots:
+
+
 signals:
-
     void threadStatus(bool Status);
+    void sendSignal(emit_Bundle&);
 
-    template<typename T>
-    void sendSignal(emit_Bundle<T> );
 
 public:
 
@@ -64,14 +68,9 @@ public:
     void showUi();
 
 private slots:
-
-
     void on_pushButton_clicked(bool checked);
 
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
-
-    template<typename T>
-    void getRcvBuf(T);
 
 private:
     void setText();
@@ -92,3 +91,5 @@ private:
 };
 
 #endif // FTP_CLIPBOARD_MAINWINDOW_H
+
+#pragma clang diagnostic pop
