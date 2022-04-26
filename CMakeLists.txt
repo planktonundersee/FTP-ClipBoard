@@ -10,14 +10,13 @@ set(CMAKE_AUTORCC ON)
 
 include_directories(F:/Programs/opencv/build/include/opencv2)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 COMPONENTS Widgets network REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets network REQUIRED)
 
-set(PROJECT_SOURCES
-        main.cpp
+set(PROJECT_SOURCES  main.cpp
         mainwindow/mainwindow.cpp
         mainwindow/mainwindow.ui
         mainwindow/mainwindow.h
@@ -26,7 +25,8 @@ set(PROJECT_SOURCES
         file_class/file_class.h
         network_class/network_class.cpp
         network_class/network_class.h
-        Public_Func/Pubilc_Func.cpp Public_Func/Pubilc_Func.h)
+        Public_Func/Pubilc_Func.cpp
+        Public_Func/Pubilc_Func.h)
 
 if (${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(FTP-ClipBoard

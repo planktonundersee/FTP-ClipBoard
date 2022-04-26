@@ -1,4 +1,5 @@
 #pragma clang diagnostic push
+#pragma ide diagnostic ignored "readability-convert-member-functions-to-static"
 #pragma clang diagnostic ignored "-Wunknown-pragmas"
 #pragma ide diagnostic ignored "cppcoreguidelines-pro-type-member-init"
 // clazy:excludeall=connect-not-normalized
@@ -7,7 +8,7 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Winvalid-noreturn"
 #pragma ide diagnostic ignored "ConstantFunctionResult"
-Network_Class::Network_Class() {
+networkClass::networkClass() {
     if (this->m_clsIsInit) {
         return;
     }
@@ -20,8 +21,8 @@ Network_Class::Network_Class() {
     this->m_ThreadStartFlag = false;
 }
 
-template<typename T>
-Network_Class::Network_Class(const QUrl &url) {
+
+networkClass::networkClass(const QUrl &url) {
     if (this->m_clsIsInit) {
         return;
     }
@@ -40,7 +41,7 @@ Network_Class::Network_Class(const QUrl &url) {
     this->m_ThreadStartFlag = false;
 }
 
-Network_Class::Network_Class(QUrl *url) {
+networkClass::networkClass(QUrl *url) {
     if (this->m_clsIsInit) {
         return;
     }
@@ -56,7 +57,7 @@ Network_Class::Network_Class(QUrl *url) {
     this->m_ThreadStartFlag = false;
 }
 
-bool Network_Class::finishedOfUpload(QNetworkReply *ftpReply) {
+bool networkClass::finishedOfUpload(QNetworkReply *ftpReply) {
     while (!ftpReply->isRunning()) {
         qDebug() << "its running";
         //TODO: 同步粘贴板
@@ -66,20 +67,20 @@ bool Network_Class::finishedOfUpload(QNetworkReply *ftpReply) {
     return false;
 }
 
-bool Network_Class::finishedOfDownload(QNetworkReply *ftpReply) {
+bool networkClass::finishedOfDownload(QNetworkReply *ftpReply) {
     while (!ftpReply->isRunning()) {
         ftpReply->thread();
     }
 }
 
 //TODO
-QString Network_Class::downloadFromServer() {
+QString networkClass::downloadFromServer() {
     while (this->m_operator_Mutex) {
         this->m_operator_Mutex = false;
         this->m_reconnectTimes = 0;
 
         QString rcvBuf = "";
-
+        rcvBuf;
         this->sync(*(this->m_url));
 
     }
@@ -88,7 +89,7 @@ QString Network_Class::downloadFromServer() {
 }
 
 //TODO
-bool Network_Class::uploadToServer() {
+bool networkClass::uploadToServer() {
     while (this->m_operator_Mutex) {
         this->m_operator_Mutex = false;
         QString content = this->m_file_class->getClipBoard()->text();
@@ -105,7 +106,7 @@ bool Network_Class::uploadToServer() {
     }
 }
 
-void Network_Class::run() {
+void networkClass::run() {
     if (!this->isInit()) {
         qDebug() << "还未初始化";
         return ;
@@ -113,22 +114,22 @@ void Network_Class::run() {
 
     //放到槽函数中,while(1)函数保证线程不结束
     while (true) {
-        if (this->m_ThreadStatus == Status::THREAD_START) {
+        if (this->m_ThreadStatus == status::THREAD_START) {
             //if ()
             qDebug() << "Working";
 
-        } else if (this->m_ThreadStatus == Network_Class::Status::THREAD_STOP) {
+        } else if (this->m_ThreadStatus == networkClass::status::THREAD_STOP) {
             sleep(1);
             qDebug() << "Do Nothing...";
         } else {
             sleep(1);
-            qDebug() << "Other Thread Status";
+            qDebug() << "Other Thread status";
         }
         return ;
     }
 }
 
-bool Network_Class::replyError(QNetworkReply::NetworkError) {
+bool networkClass::replyError(QNetworkReply::NetworkError) {
     //最多尝试三次重连，如果失败断开连接
     if (this->m_reconnectTimes >= 3) {
         if (this->m_url->isEmpty()) {
@@ -145,7 +146,7 @@ bool Network_Class::replyError(QNetworkReply::NetworkError) {
     return true;
 }
 
-bool Network_Class::send(const QString &sndStr2Serv, const QUrl &url) {
+bool networkClass::send(const QString &sndStr2Serv, const QUrl &url) {
     if (url.isEmpty()) {
         return false;
     }
@@ -169,7 +170,7 @@ bool Network_Class::send(const QString &sndStr2Serv, const QUrl &url) {
 }
 
 //单例模式?
-QNetworkAccessManager *Network_Class::getInstance() {
+QNetworkAccessManager *networkClass::getInstance() {
     if (this->m_manager == nullptr) {
         //TODO : 是否有风险?
         auto *pManager = new QNetworkAccessManager();
@@ -180,7 +181,7 @@ QNetworkAccessManager *Network_Class::getInstance() {
     }
 }
 
-bool Network_Class::isInit() {
+bool networkClass::isInit() {
     if (this->m_url->isEmpty()) {
         return false;
     } else {
@@ -188,15 +189,15 @@ bool Network_Class::isInit() {
     }
 }
 
-void Network_Class::changeThreadStatus(bool status) {
+void networkClass::changeThreadStatus(bool status) {
     this->m_ThreadStatus = status;
 }
 
-void Network_Class::setUrl(QUrl *url) {
+void networkClass::setUrl(QUrl *url) {
     this->m_url = url;
 }
 
-void Network_Class::setUrl(const QUrl &url) {
+void networkClass::setUrl(const QUrl &url) {
     this->m_url->setScheme(url.scheme());
     this->m_url->setPort(url.port());
     this->m_url->setUserName(url.userName());
@@ -204,12 +205,12 @@ void Network_Class::setUrl(const QUrl &url) {
     this->m_url->setHost(url.host());
 }
 
-bool Network_Class::clipBoardChange(bool status) {
+bool networkClass::clipBoardChange(bool status) {
     this->m_cbChange = ~this->m_cbChange;
     return true;
 }
 
-bool Network_Class::sync(const QUrl &url) {
+bool networkClass::sync(const QUrl &url) {
 
     QNetworkAccessManager *ftpManager = this->getInstance();
 
@@ -223,7 +224,7 @@ bool Network_Class::sync(const QUrl &url) {
     return true;
 }
 
-QString Network_Class::getFtpContent() {
+QString networkClass::getFtpContent() {
     QByteArray ftpContent = this->m_reply->readAll();
     QString rcvBuf = ftpContent;
 
@@ -244,7 +245,7 @@ QString Network_Class::getFtpContent() {
 
 //接受外部信号
 template<typename T>
-void Network_Class::getRcvBuf(emit_Bundle<T> rcvClass) {
+void networkClass::getRcvBuf(emit_Bundle<T> rcvClass) {
     if (rcvClass.operator_num == 1)
     {
         //TODO 上传操作
@@ -254,6 +255,7 @@ void Network_Class::getRcvBuf(emit_Bundle<T> rcvClass) {
         //TODO 下载操作
     }
 }
+
 
 #pragma clang diagnostic pop
 #pragma clang diagnostic pop

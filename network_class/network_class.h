@@ -1,4 +1,8 @@
 #pragma clang diagnostic push
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCInconsistentNamingInspection"
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "NotImplementedFunctions"
 #pragma ide diagnostic ignored "google-explicit-constructor"
 #ifndef NETWORK_CLASS_H
 #define NETWORK_CLASS_H
@@ -15,20 +19,20 @@
 
 #include "file_class/file_class.h"
 
-class Network_Class : public QThread {
+class networkClass : public QThread {
 Q_OBJECT
 
 public:
 
-    enum Status {
+    enum status {
         THREAD_START, THREAD_STOP
     };
 
-    Network_Class();
+    networkClass();
 
-    Network_Class(const QUrl &url);
+    networkClass(const QUrl &url);
 
-    Network_Class(QUrl *url);
+    networkClass(QUrl *url);
 
     [[noreturn]] void run() override;
 
@@ -48,7 +52,7 @@ public slots:
 
     bool finishedOfUpload(QNetworkReply *ftpReply);
 
-    bool finishedOfDownload(QNetworkReply *ftpReply);
+    static bool finishedOfDownload(QNetworkReply *ftpReply);
 
     void changeThreadStatus(bool status);
 
@@ -61,7 +65,7 @@ public slots:
 
 signals:
 
-    template<typename T>
+    template<class T>
     void sendSignal(emit_Bundle<T> &emitBundle);
 
 private:
@@ -77,10 +81,9 @@ private:
     QUrl *m_url{};
     QString m_swpBuf;                       //用于去除重复上下载操作
     bool m_operator_Mutex;                  //上下载操作锁   TODO 其他的上下载操作放入队列中
-    bool m_cbChange{};                        //判断粘贴板内容改变
+    bool m_cbChange{};                      //判断粘贴板内容改变
     bool m_clsIsInit;                       //本类是否被初始化过
     bool m_ThreadStatus{};                  //线程状态
-    bool m_ThreadStartFlag;                 //用于开关线程
     int m_reconnectTimes{};                 //重连次数
     QNetworkReply *m_reply{};               //应答类
     File_Class *m_file_class{};             //文件管理
@@ -88,3 +91,5 @@ private:
 };
 
 #endif // NETWORK_CLASS_H
+#pragma clang diagnostic pop
+#pragma clang diagnostic pop

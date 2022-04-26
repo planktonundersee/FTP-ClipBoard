@@ -55,7 +55,7 @@ public:
 
     void refreshListWidget();
 
-    Network_Class *getInstance();
+    networkClass *getInstance();
 
     void changeUi();
 
@@ -81,7 +81,7 @@ private:
     QFile *m_File{};                        //用于读取配置文件
     Ui::MainWindow *m_ui;                   //UI对象
     QNetworkReply *m_Reply{};               //网络应答
-    Network_Class *m_Network{};             //网络上下载
+    networkClass *m_Network{};             //网络上下载
     QClipboard *m_ClipBoard{};              //获取系统粘贴板
     QJsonObject m_JsonObj;                  //读取和解析配置文件
     bool m_Hide_UI;                         //

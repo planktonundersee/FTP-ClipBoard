@@ -37,15 +37,15 @@ void MainWindow::on_pushButton_clicked(bool checked) {
         //启动线程
         this->m_Network->setUrl(this->setUrl());
         this->m_Network->start();
-        emit this->threadStatus(Network_Class::Status::THREAD_START);
-        //Network_Class networkClass(this->setUrl(true));
+        emit this->threadStatus(networkClass::status::THREAD_START);
+        //networkClass networkClass(this->setUrl(true));
         //networkClass.run();
     } else {
         this->m_UploadFlag = false;
         this->m_DownloadFlag = false;
         this->m_ui->pushButton->setText("暂停同步");
         this->changeUi();
-        emit this->threadStatus(Network_Class::Status::THREAD_STOP);
+        emit this->threadStatus(networkClass::status::THREAD_STOP);
         //结束线程
     }
 }
@@ -68,9 +68,9 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
 }
 
 //单例模式?
-Network_Class *MainWindow::getInstance() {
+networkClass *MainWindow::getInstance() {
     if (this->m_Network == nullptr) {
-        auto network = new Network_Class(this->m_Url);
+        auto network = new networkClass(this->m_Url);
         return network;
     } else {
         return this->m_Network;
@@ -208,10 +208,6 @@ void MainWindow::showUi() {
     this->m_ui->pawdLabel->show();
     this->m_ui->portLabel->show();
     this->m_ui->pawdEdit->inputMask();
-
-}
-
-void MainWindow::getRcvBuf(QString &) {
 
 }
 
