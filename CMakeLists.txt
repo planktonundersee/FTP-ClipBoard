@@ -16,6 +16,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 COMPONENTS Widgets network REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets network REQUIRED)
 
+link_libraries(${PROJECT_SOURCE_DIR}/libiohook/lib/libuiohook.dll)
+
 set(PROJECT_SOURCES  main.cpp
         mainwindow/mainwindow.cpp
         mainwindow/mainwindow.ui
