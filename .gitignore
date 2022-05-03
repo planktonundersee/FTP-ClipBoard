@@ -3,3 +3,6 @@
 /cmake-build-relwithdebinfo-mingw_900_64
 #/cmake-build-relwithdebinfo-mingw-qt
 /build
+/libiohook/bin
+/libiohook/lib/cmake
+/libiohook/lib/pkgconfig

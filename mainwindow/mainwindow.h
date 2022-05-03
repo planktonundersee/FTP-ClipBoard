@@ -8,12 +8,12 @@
 
 #include <QUrl>
 #include <QFile>
-#include <QJsonObject>
 #include <QWidget>
 #include <iostream>
 #include <QKeyEvent>
 #include <QFileInfo>
 #include <QClipboard>
+#include <QJsonObject>
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QListWidget>

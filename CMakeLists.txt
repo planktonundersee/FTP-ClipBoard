@@ -8,7 +8,8 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-include_directories(F:/Programs/opencv/build/include/opencv2)
+link_libraries(${PROJECT_SOURCE_DIR}/libiohook/lib/win-libuiohook.dll)
+#link_libraries(${PROJECT_SOURCE_DIR}/libiohook/lib/libiohook/lib/win-libuiohook.dll.a)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -16,17 +17,18 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 COMPONENTS Widgets network REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets network REQUIRED)
 
-set(PROJECT_SOURCES  main.cpp
+set(PROJECT_SOURCES main.cpp
         mainwindow/mainwindow.cpp
         mainwindow/mainwindow.ui
         mainwindow/mainwindow.h
         mainwindow/ui_mainwindow.h
+        libiohook/include/uiohook.h
         file_class/file_class.cpp
         file_class/file_class.h
         network_class/network_class.cpp
         network_class/network_class.h
         Public_Func/Pubilc_Func.cpp
-        Public_Func/Pubilc_Func.h)
+        Public_Func/Pubilc_Func.h KeyBoard_Mouse_Hook/KeyBoard_Mouse_Hook.cpp KeyBoard_Mouse_Hook/KeyBoard_Mouse_Hook.h)
 
 if (${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(FTP-ClipBoard
