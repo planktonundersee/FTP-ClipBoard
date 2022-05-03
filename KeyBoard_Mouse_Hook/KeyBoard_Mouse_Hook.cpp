@@ -95,12 +95,11 @@ void KeyBoard_Mouse_Hook::dispatch_proc(uiohook_event *const event) {
                      event->data.wheel.type, event->data.wheel.amount,
                      event->data.wheel.rotation);
             break;
-
         default:
             break;
     }
     fprintf(stdout, "%s\n",     buffer);
-    qDebug()<<stdout;
+    qDebug()<<stdout<<"\n" ;
 #else
     return ;
 #endif
