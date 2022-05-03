@@ -8,7 +8,6 @@ File_Class::File_Class(const QFileInfo &fileInfo) {
     if (!this->createFile(fileInfo)) {
         return;
     }
-    connect(this, SIGNAL(changeFile(const QString&)), this, SLOT(append2File(const QString&)));// clazy:exclude=connect-not-normalized
 }
 
 File_Class::~File_Class() {
@@ -83,7 +82,6 @@ QClipboard *File_Class::getClipBoard() {
             //do nothing
         } else {
             emit this->dataChanged();
-            emit this->changeFile(content);
         }
     }
 }
@@ -120,6 +118,10 @@ QString File_Class::generateMessage(QString &str) {
     message >> retStr;
 
     return {retStr.c_str()};
+}
+
+QString File_Class::getRcvBuf(emitBundle &emitBundle) {
+    return {};
 }
 
 

@@ -14,6 +14,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->setWindowTitle("这儿应该放点儿什么东西才对");
 
+    this->kbmh = new KeyBoard_Mouse_Hook();
+
     this->setText();
     this->m_Network = this->getInstance();
     connect(this, SIGNAL(threadStatus(bool)), this->m_Network, SLOT(changeThreadStatus(bool)));
@@ -38,6 +40,7 @@ void MainWindow::on_pushButton_clicked(bool checked) {
         this->m_Network->setUrl(this->setUrl());
         this->m_Network->start();
         emit this->threadStatus(networkClass::status::THREAD_START);
+        this->kbmh->start();
         //networkClass networkClass(this->setUrl(true));
         //networkClass.run();
     } else {
@@ -45,6 +48,7 @@ void MainWindow::on_pushButton_clicked(bool checked) {
         this->m_DownloadFlag = false;
         this->m_ui->pushButton->setText("暂停同步");
         this->changeUi();
+        this->kbmh->terminate();
         emit this->threadStatus(networkClass::status::THREAD_STOP);
         //结束线程
     }
@@ -209,5 +213,20 @@ void MainWindow::showUi() {
     this->m_ui->portLabel->show();
     this->m_ui->pawdEdit->inputMask();
 
+}
+
+QString MainWindow::getRcvBuf(emitBundle &buf)
+{
+    if (buf.operator_num == 1)
+    {
+        //TODO 上传操作
+        return {};
+    }
+    if(buf.operator_num == 2)
+    {
+        //TODO 下载操作
+        return {};
+    }
+    return {};
 }
 

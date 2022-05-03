@@ -6,6 +6,7 @@
 
 
 bool KeyBoard_Mouse_Hook::logger_proc(unsigned int level, const char *format, ...) {
+#if 1
     bool status = false;
 
     va_list args;
@@ -25,9 +26,13 @@ bool KeyBoard_Mouse_Hook::logger_proc(unsigned int level, const char *format, ..
     }
 
     return status;
+#else
+    return 0;
+#endif
 }
 
 void KeyBoard_Mouse_Hook::dispatch_proc(uiohook_event *const event) {
+#if 1
     char buffer[256] = { 0 };
     size_t length = snprintf(buffer, sizeof(buffer),
     "id=%i,when=%" PRIu64 ",mask=0x%X",
@@ -94,12 +99,15 @@ void KeyBoard_Mouse_Hook::dispatch_proc(uiohook_event *const event) {
         default:
             break;
     }
-
     fprintf(stdout, "%s\n",     buffer);
-
+    qDebug()<<stdout;
+#else
+    return ;
+#endif
 }
 
 int KeyBoard_Mouse_Hook::keyBoard_Moust_Hook() {
+#if 1
     // Set the logger callback for library output.
     hook_set_logger_proc(&logger_proc);
 
@@ -177,9 +185,17 @@ int KeyBoard_Mouse_Hook::keyBoard_Moust_Hook() {
     }
 
     return status;
+#else
+    hook_run();
+    return 0;
+#endif
 }
 
 void KeyBoard_Mouse_Hook::run() {
     this->keyBoard_Moust_Hook();
     QThread::run();
+}
+
+QString KeyBoard_Mouse_Hook::getRcvBuf(emitBundle &emitBundle) {
+    return {};
 }

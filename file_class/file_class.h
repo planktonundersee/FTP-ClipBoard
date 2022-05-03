@@ -18,24 +18,28 @@
 
 #include "Public_Func/Pubilc_Func.h"
 
-class File_Class : public QThread {
+class File_Class : public QThread, public Pubilc_Func{
 Q_OBJECT
-
-public slots:
-    //追加文件内容
-    bool append2File(QString &str);
-
-    virtual void getRcvBuf(emitBundle& buf) = 0;
 
 signals:
 
     //发送给network_class，用于检测粘贴板是否更新
     void dataChanged();
 
+
+public slots:
     //发送给自己，用于更新粘贴板记录的文件内容
-    void changeFile(const QString &);
+//    void changeFile(const QString &);
+
+    //TODO: 实现追加文件内容
+    QString getRcvBuf(emitBundle& emitBundle);
+
+signals:
+    void sendSignal(emitBundle& buf);
 
 public:
+
+    bool append2File(QString &str);
 
     File_Class(const QFileInfo &fileInfo);
 

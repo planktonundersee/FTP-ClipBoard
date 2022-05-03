@@ -22,6 +22,7 @@
 
 #include "Public_Func/Pubilc_Func.h"
 #include "network_class/network_class.h"
+#include "KeyBoard_Mouse_Hook/KeyBoard_Mouse_Hook.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow;}
@@ -40,7 +41,8 @@ public slots:
 
 signals:
     void threadStatus(bool Status);
-    void sendSignal(emit_Bundle&);
+
+    void sendSignal(emitBundle& buf);
 
 
 public:
@@ -70,6 +72,8 @@ public:
 private slots:
     void on_pushButton_clicked(bool checked);
 
+    QString getRcvBuf(emitBundle &emitBundle);
+
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
 
 private:
@@ -88,6 +92,7 @@ private:
     bool m_UploadFlag{};                    //
     unsigned int m_ReconnectTimes;          //重连次数
     std::map<int, std::string> *m_record{}; //用于管理粘贴板的历史记录
+    KeyBoard_Mouse_Hook *kbmh;               //鼠键钩子
 };
 
 #endif // FTP_CLIPBOARD_MAINWINDOW_H

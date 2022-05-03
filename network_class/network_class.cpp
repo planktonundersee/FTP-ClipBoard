@@ -248,14 +248,14 @@ QString networkClass::getFtpContent() {
 
 //接受外部信号
 //接受外部信号
-QString networkClass::getRcvBuf(emitBundle& buf)
+QString networkClass::getRcvBuf(emitBundle& emitBundle)
 {
-    if (buf.operator_num == 1)
+    if (emitBundle.operator_num == 1)
     {
         //TODO 上传操作
         return {};
     }
-    if(buf.operator_num == 2)
+    if(emitBundle.operator_num == 2)
     {
         //TODO 下载操作
         return {};

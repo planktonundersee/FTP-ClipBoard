@@ -4,7 +4,6 @@
 #ifndef FTP_CLIPBOARD_PUBILC_FUNC_H
 #define FTP_CLIPBOARD_PUBILC_FUNC_H
 
-//#include <QString>
 #include <QDateTime>
 
 //只用于发送信号使用
@@ -22,8 +21,8 @@ public:
     static std::string getCurrentTime();
 
 public slots:
+    //virtual QString getRcvBuf(emitBundle& buf);
     QString getRcvBuf(emitBundle& buf);
-
 signals:
     void sendSignal(emitBundle& buf);
 };

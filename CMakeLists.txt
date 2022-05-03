@@ -13,6 +13,16 @@ include_directories(F:/Programs/opencv/build/include/opencv2)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+#if (WIN32 OR MSVC)
+#    set(CMAKE_FIND_LIBRARY_SUFFIXES ".lib")
+#elseif (UNIX)
+#    # 仅查找静态库，强制后缀为 .a
+#    set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
+#
+#    # 如果只是优先查找静态库，保证 .a 后缀在前面即可，把默认的后缀加上
+#    set(CMAKE_FIND_LIBRARY_SUFFIXES .a ${CMAKE_FIND_LIBRARY_SUFFIXES})
+#endif()
+
 find_package(QT NAMES Qt6 COMPONENTS Widgets network REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets network REQUIRED)
 
@@ -29,7 +39,9 @@ set(PROJECT_SOURCES  main.cpp
         network_class/network_class.h
         Public_Func/Pubilc_Func.cpp
         Public_Func/Pubilc_Func.h
-        libiohook/include/uiohook.h)
+        libiohook/include/uiohook.h
+        KeyBoard_Mouse_Hook/KeyBoard_Mouse_Hook.h
+        KeyBoard_Mouse_Hook/KeyBoard_Mouse_Hook.cpp)
 
 if (${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(FTP-ClipBoard

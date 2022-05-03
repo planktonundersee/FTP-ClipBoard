@@ -9,12 +9,12 @@
 
 #include <QUrl>
 #include <QDebug>
-#include <QByteArray>
 #include <QThread>
-#include <QListWidgetItem>
 #include <QClipboard>
+#include <QByteArray>
 #include <QMessageBox>
 #include <QNetworkReply>
+#include <QListWidgetItem>
 #include <QNetworkAccessManager>
 
 #include "file_class/file_class.h"
@@ -36,7 +36,7 @@ public:
 
     networkClass(QUrl *url);
 
-    [[noreturn]] void run() override;
+    [[noreturn]] void run();
 
     //QString 上次到服务器
 
@@ -45,7 +45,7 @@ public:
     void setUrl(QUrl *url);
 
 public slots:
-    QString getRcvBuf(emitBundle &buf);
+    QString getRcvBuf(emitBundle &emitBundle);
 
     bool uploadToServer();
 
@@ -63,8 +63,6 @@ public slots:
 
     QString getFtpContent();
 
-
-
 private:
     QNetworkAccessManager *getInstance();
 
@@ -73,6 +71,8 @@ private:
     bool sync(const QUrl &url);
 
     bool isInit();
+
+
 
 private:
     QUrl *m_url{};
