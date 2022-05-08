@@ -140,7 +140,7 @@ QString File_Class::generateMessage(QString &str) {
     return {retStr.c_str()};
 }
 
-QString File_Class::getRcvBuf(emitBundle &emitBundle) {
+QString File_Class::getRcvBuf(emitBundle emitBundle) {
     return {};
 }
 

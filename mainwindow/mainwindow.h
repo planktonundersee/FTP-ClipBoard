@@ -20,7 +20,9 @@
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
 
-#include "Public_Func/PubilcFunc.h"
+#include "Public_Func/PublicFunc.h"
+#include "network_class/network_class.h"
+#include "KeyBoard_Mouse_Hook/KeyBoard_Mouse_Hook.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow;}
@@ -40,7 +42,7 @@ public slots:
 signals:
     void threadStatus(bool Status);
 
-    void sendSignal(emitBundle& buf);
+    void sendSignal(emitBundle buf);
 
 
 public:

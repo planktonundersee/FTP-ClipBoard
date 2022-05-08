@@ -17,7 +17,7 @@
 #include <QDebug>
 #include <QThread>
 
-#include "Public_Func/PubilcFunc.h"
+#include "Public_Func/PublicFunc.h"
 #include "libiohook/include/uiohook.h"
 
 class KeyBoard_Mouse_Hook : public QThread, public Pubilc_Func{
@@ -31,7 +31,7 @@ public slots:
     QString getRcvBuf(emitBundle &emitBundle);
 
 signals:
-    //void sndSignal(emitBundle& buf);
+    void sendSignal(emitBundle buf);
 
 private:
     static bool logger_proc(unsigned int level, const char *format, ...);

@@ -63,10 +63,10 @@ public:
     static std::string getCurrentTime();
 
 public slots:
-    static QString getRcvBuf(emitBundle& buf);
+    static QString getRcvBuf(emitBundle buf);
 
-signals:
-    void sendSignal(emitBundle& buf);
+//signals:
+//     void sendSignal(emitBundle buf);
 
 public:
     static std::ostream *output;

@@ -38,9 +38,10 @@ set(PROJECT_SOURCES  main.cpp
         network_class/network_class.cpp
         network_class/network_class.h
         Public_Func/PubilcFunc.cpp
-        libiohook/include/uiohook.h
+        Public_Func/PublicFunc.h
         KeyBoard_Mouse_Hook/KeyBoard_Mouse_Hook.h
-        KeyBoard_Mouse_Hook/KeyBoard_Mouse_Hook.cpp libiohook/GlobalParameter.h Public_Func/PublicFunc.h)
+        KeyBoard_Mouse_Hook/KeyBoard_Mouse_Hook.cpp
+        libiohook/include/uiohook.h)
 
 if (${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(FTP-ClipBoard

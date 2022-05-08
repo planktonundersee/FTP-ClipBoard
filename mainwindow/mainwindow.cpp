@@ -1,6 +1,5 @@
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
-#include "libiohook/GlobalParameter.h"
 
 //密码加密
 //选择配置 JSON
@@ -58,7 +57,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
     if ((event->modifiers() == Qt::ControlModifier) && (event->key() == Qt::Key_C)) {
         if (this->m_UploadFlag) {
             //TODO
-            emitBundle sendClass;
+            emitBundle sendClass = emitBundle();
             sendClass.setOperatorNumber(11);
             emit sendSignal(sendClass);
         }

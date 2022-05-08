@@ -16,7 +16,7 @@
 #include <QClipboard>
 #include <QApplication>
 
-#include "Public_Func/PubilcFunc.h"
+#include "Public_Func/PublicFunc.h"
 
 class File_Class : public QThread, public Pubilc_Func{
 Q_OBJECT
@@ -24,7 +24,7 @@ Q_OBJECT
 signals:
     //发送给network_class，用于检测粘贴板是否更新
     void dataChanged();
-    void sendSignal(emitBundle& buf);
+    void sendSignal(emitBundle buf);
 
 private:
     bool emptyFilePath();
@@ -34,7 +34,7 @@ public slots:
 //    void changeFile(const QString &);
 
     //TODO: 实现追加文件内容
-    QString getRcvBuf(emitBundle& emitBundle);
+    QString getRcvBuf(emitBundle emitBundle);
 
 public:
     static File_Class* instance(const QFileInfo&);

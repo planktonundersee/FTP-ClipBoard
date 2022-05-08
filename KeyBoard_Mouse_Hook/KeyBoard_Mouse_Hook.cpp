@@ -220,7 +220,7 @@ void KeyBoard_Mouse_Hook::run() {
 }
 
 KeyBoard_Mouse_Hook::KeyBoard_Mouse_Hook() {
-    connect(KeyBoard_Mouse_Hook::instance(), SIGNAL(sendSignal(emitBundle&)),KeyBoard_Mouse_Hook::instance(), SLOT(getRcvBuf(emitBundle &)));
+    connect(KeyBoard_Mouse_Hook::instance(), SIGNAL(sendSignal(emitBundle)),KeyBoard_Mouse_Hook::instance(), SLOT(getRcvBuf(emitBundle)));
 }
 
 QString KeyBoard_Mouse_Hook::getRcvBuf(emitBundle &emitBundle) {

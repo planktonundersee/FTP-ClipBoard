@@ -241,7 +241,7 @@ QString networkClass::getFtpContent() {
         this->m_file_class->append2File(rcvBuf);
 
         // 发给mainWindow
-        emit_Bundle getRcvBuf;
+        emit_Bundle getRcvBuf = emit_Bundle();
         getRcvBuf.setbuf(rcvBuf);
         emit sendSignal(getRcvBuf);
     }
@@ -257,7 +257,7 @@ networkClass* networkClass::instance()
 
 //接受外部信号
 //接受外部信号
-QString networkClass::getRcvBuf(emitBundle& emitBundle)
+QString networkClass::getRcvBuf(emitBundle emitBundle)
 {
     if (emitBundle.getOperatorNumber() == 1)
     {

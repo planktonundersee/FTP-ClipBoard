@@ -5,7 +5,7 @@
 #pragma clang diagnostic ignored "-Wunknown-pragmas"
 #pragma ide diagnostic ignored "OCInconsistentNamingInspection"
 
-#include "Pubilc_Func.h"
+#include "PublicFunc.h"
 
 Pubilc_Func* Pubilc_Func::m_publicFunc = nullptr;
 
@@ -87,6 +87,11 @@ emit_Bundle::emit_Bundle(int operatorNum,short threadName,keyBoard key)
     this->operator_num = operatorNum;
     this->thread_Name = threadName;
     this->key = key;
+}
+
+emit_Bundle::emit_Bundle()
+{
+
 }
 
 #pragma clang diagnostic pop

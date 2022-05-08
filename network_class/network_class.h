@@ -18,13 +18,14 @@
 #include <QNetworkAccessManager>
 
 #include "file_class/file_class.h"
+#include "Public_Func/PublicFunc.h"
 
 class networkClass : public QThread ,public Pubilc_Func
 {
     Q_OBJECT
 
 signals:
-    void sendSignal(emitBundle& buf);
+    void sendSignal(emitBundle buf);
 public:
     enum status {
         THREAD_START, THREAD_STOP
@@ -45,7 +46,7 @@ public:
     void setUrl(QUrl *url);
 
 public slots:
-    QString getRcvBuf(emitBundle &emitBundle);
+    QString getRcvBuf(emitBundle emitBundle);
 
     bool uploadToServer();
 
