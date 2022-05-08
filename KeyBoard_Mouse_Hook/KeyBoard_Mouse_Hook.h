@@ -12,30 +12,35 @@
 #include <stdbool.h>
 #include <inttypes.h>
 
+#include <string>
+
 #include <QDebug>
 #include <QThread>
 
-#include "Public_Func/Pubilc_Func.h"
+#include "Public_Func/PubilcFunc.h"
 #include "libiohook/include/uiohook.h"
 
 class KeyBoard_Mouse_Hook : public QThread, public Pubilc_Func{
     Q_OBJECT
 public:
+    KeyBoard_Mouse_Hook();
+    static KeyBoard_Mouse_Hook* instance();
     void run();
 
 public slots:
     QString getRcvBuf(emitBundle &emitBundle);
 
 signals:
-    void sendSignal(emitBundle& buf);
+    //void sndSignal(emitBundle& buf);
 
 private:
     static bool logger_proc(unsigned int level, const char *format, ...);
 
     static void dispatch_proc(uiohook_event * const event);
 
-    int keyBoard_Moust_Hook();
+    int startHook();
 
+    static KeyBoard_Mouse_Hook* kbmh;
 };
 
 

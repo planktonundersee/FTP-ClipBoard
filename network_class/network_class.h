@@ -63,6 +63,8 @@ public slots:
 
     QString getFtpContent();
 
+    static networkClass* instance();
+
 private:
     QNetworkAccessManager *getInstance();
 
@@ -75,6 +77,9 @@ private:
 
 
 private:
+
+    static networkClass *m_networkClass;
+
     QUrl *m_url{};
     QString m_swpBuf;                       //用于去除重复上下载操作
     bool m_operator_Mutex;                  //上下载操作锁   TODO 其他的上下载操作放入队列中

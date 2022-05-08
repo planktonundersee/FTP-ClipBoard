@@ -2,7 +2,24 @@
 #include <sstream>
 #include "file_class.h"
 
-File_Class::File_Class(const QFileInfo &fileInfo) {
+File_Class* File_Class::m_fileClass = nullptr;
+
+File_Class::File_Class(const QFileInfo &fileInfo)
+{
+    //路径为空
+    if(fileInfo.path().isNull())
+    {
+        this->m_emptyPath = true;
+        exit(0);
+    }
+
+    //路径格式不对
+    if(-1 == fileInfo.path().indexOf('\\') || (-1 == fileInfo.path().indexOf('/')))
+    {
+        this->m_emptyPath = true;
+        exit(0);
+    }
+
     this->m_cbContent = new QString();
     //初始化
     if (!this->createFile(fileInfo)) {
@@ -21,16 +38,19 @@ bool File_Class::createFile(const QFileInfo &fileInfo) {
         return false;
     }
 
-    qDebug() << "File Path : " << this->m_file->fileName();
-
+    //存在就直接打开
     if (fileInfo.isFile()) {
         this->m_file->open(QIODevice::ReadWrite);
         return true;
-    } else {
+    }
+    else
+    {   //不存在就新建
         if (!this->m_file->open(QIODevice::ReadWrite | QIODevice::Text)) {
             qDebug() << __LINE__ - 2 << "\t" << __FUNCTION__;
             return true;
-        } else {
+        }
+        else
+        {
             qDebug() << "open file success" << " :: " << this->m_file->fileName();
             return false;
         }
@@ -75,7 +95,7 @@ QClipboard *File_Class::getClipBoard() {
     return this->m_ClipBoard;
 }
 
-[[noreturn]] void File_Class::run() {
+void File_Class::run() {
     while (true) {
         QString content = this->m_ClipBoard->text();
         if (*this->m_cbContent == content) {
@@ -122,6 +142,18 @@ QString File_Class::generateMessage(QString &str) {
 
 QString File_Class::getRcvBuf(emitBundle &emitBundle) {
     return {};
+}
+
+File_Class* File_Class::instance(const QFileInfo &fileInfo) {
+    if(File_Class::m_fileClass == nullptr)
+        File_Class::m_fileClass = new File_Class(fileInfo);
+    return File_Class::m_fileClass;
+}
+
+bool File_Class::emptyFilePath() {
+    if(this->m_emptyPath)
+        return true;
+    return false;
 }
 
 

@@ -1,18 +1,13 @@
-#include "mainwindow/mainwindow.h"
-
 #include <QApplication>
-
-#include "KeyBoard_Mouse_Hook/KeyBoard_Mouse_Hook.h"
+#include "mainwindow/mainwindow.h"
+#include "libiohook/GlobalParameter.h"
+//TODO: MIMEdata
+//TODO: 读取配置文件
 
 int main(int argc, char *argv[])
 {
-    qDebug()<<"the number of parameter is :" << argc ;
-    for (int i = 0; i < argc ; ++i)
-    {
-        qDebug()<< "\n" << "argv is : " << argv[i];
-    }
+    //TODO: 读取文件路径
     QApplication application(argc, argv);
-    MainWindow window;
-    window.show();
+    MainWindow::instance()->show();
     return QApplication::exec();
 }

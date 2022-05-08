@@ -5,6 +5,8 @@
 // clazy:excludeall=connect-not-normalized
 #include "network_class.h"
 
+networkClass* networkClass::m_networkClass = nullptr;
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Winvalid-noreturn"
 #pragma ide diagnostic ignored "ConstantFunctionResult"
@@ -240,22 +242,29 @@ QString networkClass::getFtpContent() {
 
         // 发给mainWindow
         emit_Bundle getRcvBuf;
-        getRcvBuf.template_Class = rcvBuf;
+        getRcvBuf.setbuf(rcvBuf);
         emit sendSignal(getRcvBuf);
     }
     return {};
+}
+
+networkClass* networkClass::instance()
+{
+    if(networkClass::m_networkClass == nullptr)
+        networkClass::m_networkClass = new networkClass();
+    return networkClass::m_networkClass;
 }
 
 //接受外部信号
 //接受外部信号
 QString networkClass::getRcvBuf(emitBundle& emitBundle)
 {
-    if (emitBundle.operator_num == 1)
+    if (emitBundle.getOperatorNumber() == 1)
     {
         //TODO 上传操作
         return {};
     }
-    if(emitBundle.operator_num == 2)
+    if(emitBundle.getOperatorNumber() == 2)
     {
         //TODO 下载操作
         return {};

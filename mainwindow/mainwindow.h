@@ -20,9 +20,7 @@
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
 
-#include "Public_Func/Pubilc_Func.h"
-#include "network_class/network_class.h"
-#include "KeyBoard_Mouse_Hook/KeyBoard_Mouse_Hook.h"
+#include "Public_Func/PubilcFunc.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow;}
@@ -46,7 +44,6 @@ signals:
 
 
 public:
-
     QUrl *setUrl();
 
     QUrl setUrl(bool point);
@@ -61,13 +58,13 @@ public:
 
     void refreshListWidget();
 
-    networkClass *getInstance();
-
     void changeUi();
 
     void hideUi();
 
     void showUi();
+
+    static MainWindow* instance();
 
 private slots:
     void on_pushButton_clicked(bool checked);
@@ -80,11 +77,11 @@ private:
     void setText();
 
 private:
+    static MainWindow* m_mainWindow;
     QUrl *m_Url{};                          //Url
     QFile *m_File{};                        //用于读取配置文件
     Ui::MainWindow *m_ui;                   //UI对象
     QNetworkReply *m_Reply{};               //网络应答
-    networkClass *m_Network{};             //网络上下载
     QClipboard *m_ClipBoard{};              //获取系统粘贴板
     QJsonObject m_JsonObj;                  //读取和解析配置文件
     bool m_Hide_UI;                         //
@@ -92,7 +89,6 @@ private:
     bool m_UploadFlag{};                    //
     unsigned int m_ReconnectTimes;          //重连次数
     std::map<int, std::string> *m_record{}; //用于管理粘贴板的历史记录
-    KeyBoard_Mouse_Hook *kbmh;               //鼠键钩子
 };
 
 #endif // FTP_CLIPBOARD_MAINWINDOW_H

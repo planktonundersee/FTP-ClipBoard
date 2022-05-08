@@ -1,8 +1,12 @@
-#include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "mainwindow.h"
+#include "libiohook/GlobalParameter.h"
+
 //密码加密
 //选择配置 JSON
 //NetWork 保活
+
+MainWindow* MainWindow::m_mainWindow = nullptr;
 
 MainWindow::MainWindow(QWidget *parent)
         : QMainWindow(parent), m_ui(new Ui::MainWindow)
@@ -14,15 +18,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     this->setWindowTitle("这儿应该放点儿什么东西才对");
 
-    this->kbmh = new KeyBoard_Mouse_Hook();
-
     this->setText();
-    this->m_Network = this->getInstance();
-    connect(this, SIGNAL(threadStatus(bool)), this->m_Network, SLOT(changeThreadStatus(bool)));
+    connect(this, SIGNAL(threadStatus(bool)), networkClass::instance(), SLOT(changeThreadStatus(bool)));
 }
 
 MainWindow::~MainWindow() {
-    delete this->m_Network;
     delete this->m_record;
     delete this->m_Reply;
     delete this->m_File;
@@ -37,10 +37,10 @@ void MainWindow::on_pushButton_clicked(bool checked) {
         this->m_Url = this->setUrl();
         this->changeUi();
         //启动线程
-        this->m_Network->setUrl(this->setUrl());
-        this->m_Network->start();
+        networkClass::instance()->setUrl(this->setUrl());
+        networkClass::instance()->start();
         emit this->threadStatus(networkClass::status::THREAD_START);
-        this->kbmh->start();
+        KeyBoard_Mouse_Hook::instance()->run();
         //networkClass networkClass(this->setUrl(true));
         //networkClass.run();
     } else {
@@ -48,7 +48,7 @@ void MainWindow::on_pushButton_clicked(bool checked) {
         this->m_DownloadFlag = false;
         this->m_ui->pushButton->setText("暂停同步");
         this->changeUi();
-        this->kbmh->terminate();
+        KeyBoard_Mouse_Hook::instance()->terminate();
         emit this->threadStatus(networkClass::status::THREAD_STOP);
         //结束线程
     }
@@ -59,7 +59,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
         if (this->m_UploadFlag) {
             //TODO
             emitBundle sendClass;
-            sendClass.operator_num = 1;
+            sendClass.setOperatorNumber(11);
             emit sendSignal(sendClass);
         }
 
@@ -68,16 +68,6 @@ void MainWindow::keyPressEvent(QKeyEvent *event) {
         if (this->m_DownloadFlag) {
             //TODO
         }
-    }
-}
-
-//单例模式?
-networkClass *MainWindow::getInstance() {
-    if (this->m_Network == nullptr) {
-        auto network = new networkClass(this->m_Url);
-        return network;
-    } else {
-        return this->m_Network;
     }
 }
 
@@ -217,16 +207,22 @@ void MainWindow::showUi() {
 
 QString MainWindow::getRcvBuf(emitBundle &buf)
 {
-    if (buf.operator_num == 1)
+    if (buf.getOperatorNumber() == 1)
     {
         //TODO 上传操作
         return {};
     }
-    if(buf.operator_num == 2)
+    if(buf.getOperatorNumber() == 2)
     {
         //TODO 下载操作
         return {};
     }
     return {};
+}
+
+MainWindow *MainWindow::instance() {
+    if(nullptr == MainWindow::m_mainWindow)
+        MainWindow::m_mainWindow = new MainWindow();
+    return MainWindow::m_mainWindow;
 }
 
