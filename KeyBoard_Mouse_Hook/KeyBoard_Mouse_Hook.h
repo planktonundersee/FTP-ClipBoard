@@ -24,6 +24,12 @@ class KeyBoard_Mouse_Hook : public QThread, public Pubilc_Func{
     Q_OBJECT
 public:
     KeyBoard_Mouse_Hook();
+
+    ~KeyBoard_Mouse_Hook()
+    {
+        delete[] this->kbmh;
+    }
+
     static KeyBoard_Mouse_Hook* instance();
     void run();
 
@@ -34,6 +40,8 @@ signals:
     void sendSignal(emitBundle buf);
 
 private:
+    static void printf_Event_Info(uiohook_event *const event, char* buffer);
+
     static bool logger_proc(unsigned int level, const char *format, ...);
 
     static void dispatch_proc(uiohook_event * const event);

@@ -32,12 +32,24 @@ bool KeyBoard_Mouse_Hook::logger_proc(unsigned int level, const char *format, ..
 #endif
 }
 
+void KeyBoard_Mouse_Hook::printf_Event_Info(uiohook_event *const event, char* buffer)
+{
+    snprintf(buffer, sizeof(buffer),
+             "id=%i, when=%" PRIu64 ", mask=0x%X \n",
+             event->type, event->time, event->mask);
+}
+
 void KeyBoard_Mouse_Hook::dispatch_proc(uiohook_event *const event) {
 #if 1
     char buffer[256] = { 0 };
-    size_t length = snprintf(buffer, sizeof(buffer),
-    "id=%i,when=%" PRIu64 ",mask=0x%X",
-            event->type, event->time, event->mask);
+#if 0
+    //打印所有鼠键信息
+//    size_t length = snprintf(buffer, sizeof(buffer),
+//    "id=%i,when=%" PRIu64 ",mask=0x%X",
+//            event->type, event->time, event->mask);
+#else
+    size_t length = sizeof(buffer);
+#endif
     //switch 内不能定义
     keyBoard key;
     emitBundle buf = emit_Bundle();
@@ -71,6 +83,7 @@ void KeyBoard_Mouse_Hook::dispatch_proc(uiohook_event *const event) {
             }
             else
             {
+                printf_Event_Info(event,buffer);
                 qDebug()<<"event->data.keyboard.keycode != VC_ESCAPE";
                 break;
             }
@@ -84,6 +97,9 @@ void KeyBoard_Mouse_Hook::dispatch_proc(uiohook_event *const event) {
             buf.setKey(key);
             buf.setOperatorNumber(1);
             buf.setThreadNumber(KEYBOARD_MOUSE_HOOK);
+
+            printf_Event_Info(event,buffer);
+
             KeyBoard_Mouse_Hook::instance()->sendSignal(buf);
             break;
 
@@ -99,6 +115,9 @@ void KeyBoard_Mouse_Hook::dispatch_proc(uiohook_event *const event) {
             buf.setKey(key);
             buf.setOperatorNumber(1);
             buf.setThreadNumber(KEYBOARD_MOUSE_HOOK);
+
+            printf_Event_Info(event,buffer);
+
             KeyBoard_Mouse_Hook::instance()->sendSignal(buf);
             break;
 //
@@ -132,10 +151,10 @@ void KeyBoard_Mouse_Hook::dispatch_proc(uiohook_event *const event) {
 int KeyBoard_Mouse_Hook::startHook() {
 #if 1
      //Set the logger callback for library output.
-//    hook_set_logger_proc(&logger_proc);
+    hook_set_logger_proc(&logger_proc);
 
     // Set the event callback for uiohook events.
-//    hook_set_dispatch_proc(&dispatch_proc);
+    hook_set_dispatch_proc(&dispatch_proc);
 
     // Start the hook and block.
     // NOTE If EVENT_HOOK_ENABLED was delivered, the status will always succeed.
@@ -220,7 +239,7 @@ void KeyBoard_Mouse_Hook::run() {
 }
 
 KeyBoard_Mouse_Hook::KeyBoard_Mouse_Hook() {
-    connect(KeyBoard_Mouse_Hook::instance(), SIGNAL(sendSignal(emitBundle)),KeyBoard_Mouse_Hook::instance(), SLOT(getRcvBuf(emitBundle)));
+    connect(this, SIGNAL(sendSignal(emitBundle)),this->parent(), SLOT(getRcvBuf(emitBundle)));
 }
 
 QString KeyBoard_Mouse_Hook::getRcvBuf(emitBundle &emitBundle) {

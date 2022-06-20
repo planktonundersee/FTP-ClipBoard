@@ -39,7 +39,7 @@ void MainWindow::on_pushButton_clicked(bool checked) {
         networkClass::instance()->setUrl(this->setUrl());
         networkClass::instance()->start();
         emit this->threadStatus(networkClass::status::THREAD_START);
-        KeyBoard_Mouse_Hook::instance()->run();
+        m_KBMH.run();
         //networkClass networkClass(this->setUrl(true));
         //networkClass.run();
     } else {
@@ -47,28 +47,28 @@ void MainWindow::on_pushButton_clicked(bool checked) {
         this->m_DownloadFlag = false;
         this->m_ui->pushButton->setText("暂停同步");
         this->changeUi();
-        KeyBoard_Mouse_Hook::instance()->terminate();
+        m_KBMH.terminate();
         emit this->threadStatus(networkClass::status::THREAD_STOP);
         //结束线程
     }
 }
 
-void MainWindow::keyPressEvent(QKeyEvent *event) {
-    if ((event->modifiers() == Qt::ControlModifier) && (event->key() == Qt::Key_C)) {
-        if (this->m_UploadFlag) {
-            //TODO
-            emitBundle sendClass = emitBundle();
-            sendClass.setOperatorNumber(11);
-            emit sendSignal(sendClass);
-        }
-
-    }
-    if ((event->modifiers() == Qt::ControlModifier) && (event->modifiers() == Qt::ShiftModifier) && (event->key()) == Qt::Key_V) {
-        if (this->m_DownloadFlag) {
-            //TODO
-        }
-    }
-}
+//void MainWindow::keyPressEvent(QKeyEvent *event) {
+//    if ((event->modifiers() == Qt::ControlModifier) && (event->key() == Qt::Key_C)) {
+//        if (this->m_UploadFlag) {
+//            //TODO
+//            emitBundle sendClass = emitBundle();
+//            sendClass.setOperatorNumber(11);
+//            emit sendSignal(sendClass);
+//        }
+//
+//    }
+//    if ((event->modifiers() == Qt::ControlModifier) && (event->modifiers() == Qt::ShiftModifier) && (event->key()) == Qt::Key_V) {
+//        if (this->m_DownloadFlag) {
+//            //TODO
+//        }
+//    }
+//}
 
 void MainWindow::changeUi() {
     if (this->m_Hide_UI) {

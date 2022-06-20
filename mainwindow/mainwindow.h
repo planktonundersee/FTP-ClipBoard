@@ -50,7 +50,7 @@ public:
 
     QUrl setUrl(bool point);
 
-    void keyPressEvent(QKeyEvent *event) override;
+//    void keyPressEvent(QKeyEvent *event) override;
 
     void addListWidget();
 
@@ -80,6 +80,7 @@ private:
 
 private:
     static MainWindow* m_mainWindow;
+    KeyBoard_Mouse_Hook m_KBMH;             //全局监控类
     QUrl *m_Url{};                          //Url
     QFile *m_File{};                        //用于读取配置文件
     Ui::MainWindow *m_ui;                   //UI对象
