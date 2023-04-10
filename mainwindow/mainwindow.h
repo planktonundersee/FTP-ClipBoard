@@ -21,7 +21,7 @@
 #include <QNetworkAccessManager>
 
 #include "Public_Func/PublicFunc.h"
-#include "network_class/network_class.h"
+#include "network_class/NetworkClass.h"
 #include "KeyBoard_Mouse_Hook/KeyBoard_Mouse_Hook.h"
 
 QT_BEGIN_NAMESPACE

@@ -33,14 +33,14 @@ set(PROJECT_SOURCES  main.cpp
         mainwindow/mainwindow.ui
         mainwindow/mainwindow.h
         mainwindow/ui_mainwindow.h
-        file_class/file_class.cpp
-        file_class/file_class.h
-        network_class/network_class.cpp
-        network_class/network_class.h
+        FileClass/FileClass.cpp
+        FileClass/FileClass.h
+        network_class/NetworkClass.cpp
+        network_class/NetworkClass.h
         Public_Func/PubilcFunc.cpp
         Public_Func/PublicFunc.h
-        KeyBoard_Mouse_Hook/KeyBoard_Mouse_Hook.h
-        KeyBoard_Mouse_Hook/KeyBoard_Mouse_Hook.cpp
+        KeyBoardMouseHook/KeyBoardMouseHook.h
+        KeyBoardMouseHook/KeyBoardMouseHook.cpp
         libiohook/include/uiohook.h)
 
 if (${QT_VERSION_MAJOR} GREATER_EQUAL 6)

@@ -1,6 +1,6 @@
 #include <QFileInfo>
 #include <sstream>
-#include "file_class.h"
+#include "FileClass.h"
 
 File_Class* File_Class::m_fileClass = nullptr;
 

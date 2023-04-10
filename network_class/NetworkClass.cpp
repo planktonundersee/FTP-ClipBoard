@@ -3,7 +3,7 @@
 #pragma clang diagnostic ignored "-Wunknown-pragmas"
 #pragma ide diagnostic ignored "cppcoreguidelines-pro-type-member-init"
 // clazy:excludeall=connect-not-normalized
-#include "network_class.h"
+#include "NetworkClass.h"
 
 networkClass* networkClass::m_networkClass = nullptr;
 
