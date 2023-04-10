@@ -20,17 +20,17 @@
 #include "Public_Func/PublicFunc.h"
 #include "libiohook/include/uiohook.h"
 
-class KeyBoard_Mouse_Hook : public QThread, public Pubilc_Func{
+class KeyBoardMouseHook : public QThread, public Pubilc_Func{
     Q_OBJECT
 public:
-    KeyBoard_Mouse_Hook();
+    KeyBoardMouseHook();
 
-    ~KeyBoard_Mouse_Hook()
+    ~KeyBoardMouseHook()
     {
         delete[] this->kbmh;
     }
 
-    static KeyBoard_Mouse_Hook* instance();
+    static KeyBoardMouseHook* instance();
     void run();
 
 public slots:
@@ -48,7 +48,7 @@ private:
 
     int startHook();
 
-    static KeyBoard_Mouse_Hook* kbmh;
+    static KeyBoardMouseHook* kbmh;
 };
 
 

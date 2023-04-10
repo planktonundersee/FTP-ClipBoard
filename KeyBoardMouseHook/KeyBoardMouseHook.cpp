@@ -4,9 +4,9 @@
 
 #include "KeyBoard_Mouse_Hook.h"
 
-KeyBoard_Mouse_Hook* KeyBoard_Mouse_Hook::kbmh = nullptr;
+KeyBoardMouseHook* KeyBoardMouseHook::kbmh = nullptr;
 
-bool KeyBoard_Mouse_Hook::logger_proc(unsigned int level, const char *format, ...) {
+bool KeyBoardMouseHook::logger_proc(unsigned int level, const char *format, ...) {
 #if 1
     bool status = false;
 
@@ -32,14 +32,14 @@ bool KeyBoard_Mouse_Hook::logger_proc(unsigned int level, const char *format, ..
 #endif
 }
 
-void KeyBoard_Mouse_Hook::printf_Event_Info(uiohook_event *const event, char* buffer)
+void KeyBoardMouseHook::printf_Event_Info(uiohook_event *const event, char* buffer)
 {
     snprintf(buffer, sizeof(buffer),
              "id=%i, when=%" PRIu64 ", mask=0x%X \n",
              event->type, event->time, event->mask);
 }
 
-void KeyBoard_Mouse_Hook::dispatch_proc(uiohook_event *const event) {
+void KeyBoardMouseHook::dispatch_proc(uiohook_event *const event) {
 #if 1
     char buffer[256] = { 0 };
 #if 0
@@ -100,7 +100,7 @@ void KeyBoard_Mouse_Hook::dispatch_proc(uiohook_event *const event) {
 
             printf_Event_Info(event,buffer);
 
-            KeyBoard_Mouse_Hook::instance()->sendSignal(buf);
+            KeyBoardMouseHook::instance()->sendSignal(buf);
             break;
 
         case EVENT_KEY_TYPED:
@@ -118,7 +118,7 @@ void KeyBoard_Mouse_Hook::dispatch_proc(uiohook_event *const event) {
 
             printf_Event_Info(event,buffer);
 
-            KeyBoard_Mouse_Hook::instance()->sendSignal(buf);
+            KeyBoardMouseHook::instance()->sendSignal(buf);
             break;
 //
 //        case EVENT_MOUSE_PRESSED:
@@ -148,7 +148,7 @@ void KeyBoard_Mouse_Hook::dispatch_proc(uiohook_event *const event) {
 #endif
 }
 
-int KeyBoard_Mouse_Hook::startHook() {
+int KeyBoardMouseHook::startHook() {
 #if 1
      //Set the logger callback for library output.
     hook_set_logger_proc(&logger_proc);
@@ -233,16 +233,16 @@ int KeyBoard_Mouse_Hook::startHook() {
 #endif
 }
 
-void KeyBoard_Mouse_Hook::run() {
+void KeyBoardMouseHook::run() {
     this->startHook();
     QThread::run();
 }
 
-KeyBoard_Mouse_Hook::KeyBoard_Mouse_Hook() {
+KeyBoardMouseHook::KeyBoardMouseHook() {
     connect(this, SIGNAL(sendSignal(emitBundle)),this->parent(), SLOT(getRcvBuf(emitBundle)));
 }
 
-QString KeyBoard_Mouse_Hook::getRcvBuf(emitBundle &emitBundle) {
+QString KeyBoardMouseHook::getRcvBuf(emitBundle &emitBundle) {
     if (1 != emitBundle.getOperatorNumber())
         return {};
     if (KEYBOARD_MOUSE_HOOK != emitBundle.getThreadNumber())
@@ -251,9 +251,9 @@ QString KeyBoard_Mouse_Hook::getRcvBuf(emitBundle &emitBundle) {
     qDebug()<< "keyChar =================" <<emitBundle.getKey().keyChar;
 }
 
-KeyBoard_Mouse_Hook *KeyBoard_Mouse_Hook::instance()
+KeyBoardMouseHook *KeyBoardMouseHook::instance()
 {
-    if(nullptr == KeyBoard_Mouse_Hook::kbmh)
-        KeyBoard_Mouse_Hook::kbmh = new KeyBoard_Mouse_Hook();
-    return KeyBoard_Mouse_Hook::kbmh;
+    if(nullptr == KeyBoardMouseHook::kbmh)
+        KeyBoardMouseHook::kbmh = new KeyBoardMouseHook();
+    return KeyBoardMouseHook::kbmh;
 }
