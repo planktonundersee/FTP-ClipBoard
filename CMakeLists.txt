@@ -1,34 +1,31 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.15)
 
-project(FTP-ClipBoard VERSION 0.1 LANGUAGES CXX)
+project(FTP_ClipBoard VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-include_directories(F:/Programs/opencv/build/include/opencv2)
-
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_PREFIX_PATH /opt/Nvme/Qt6/Qt/6.9.2/gcc_64/)
+set(CMAKE_PREFIX_PATH:UNINITIALIZED /opt/Nvme/Qt6/Qt/6.9.2/gcc_64/)
 
-#if (WIN32 OR MSVC)
-#    set(CMAKE_FIND_LIBRARY_SUFFIXES ".lib")
-#elseif (UNIX)
-#    # 仅查找静态库，强制后缀为 .a
-#    set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
-#
-#    # 如果只是优先查找静态库，保证 .a 后缀在前面即可，把默认的后缀加上
-#    set(CMAKE_FIND_LIBRARY_SUFFIXES .a ${CMAKE_FIND_LIBRARY_SUFFIXES})
-#endif()
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets Network Core REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets Network Core REQUIRED)
 
-find_package(QT NAMES Qt6 COMPONENTS Widgets network REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets network REQUIRED)
+include_directories(${Qt6Core_INCLUDE_DIRS}
+    ${Qt6Core_PRIVATE_INCLUDE_DIRS}
+)
 
-link_libraries(${PROJECT_SOURCE_DIR}/libiohook/lib/uiohook.dll)
+if(WIN32)
+    link_libraries(${PROJECT_SOURCE_DIR}/libiohook/lib/uiohook.dll)
+endif(WIN32)
 
-set(PROJECT_SOURCES  main.cpp
+set(PROJECT_SOURCES main.cpp
         mainwindow/mainwindow.cpp
         mainwindow/mainwindow.ui
         mainwindow/mainwindow.h
@@ -43,39 +40,38 @@ set(PROJECT_SOURCES  main.cpp
         KeyBoardMouseHook/KeyBoardMouseHook.cpp
         libiohook/include/uiohook.h)
 
-if (${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(FTP-ClipBoard
+if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+    qt_add_executable(FTP_ClipBoard
             MANUAL_FINALIZATION
             ${PROJECT_SOURCES}
-            )
-    # Define target properties for Android with Qt 6 as:
-    #    set_property(TARGET FTP-ClipBoard APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-    #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
-    # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
-else ()
-    if (ANDROID)
-        add_library(FTP-ClipBoard SHARED
-                ${PROJECT_SOURCES}
-                )
-        # Define properties for Android with Qt 5 after find_package() calls as:
-        #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-    else ()
-        add_executable(FTP-ClipBoard
-                ${PROJECT_SOURCES}
-                )
-    endif ()
-endif ()
+    )
 
-target_link_libraries(FTP-ClipBoard PRIVATE Qt${QT_VERSION_MAJOR}::Widgets Qt${QT_VERSION_MAJOR}::Network)
+else()
+    if(ANDROID)
+        add_library(FTP_ClipBoard SHARED
+                ${PROJECT_SOURCES}
+        )
 
-set_target_properties(FTP-ClipBoard PROPERTIES
+    else()
+        add_executable(FTP_ClipBoard
+                ${PROJECT_SOURCES}
+        )
+    endif()
+endif()
+
+target_link_libraries(FTP_ClipBoard PRIVATE
+    Qt${QT_VERSION_MAJOR}::Widgets
+    Qt${QT_VERSION_MAJOR}::Network
+    Qt${QT_VERSION_MAJOR}::Core)
+
+set_target_properties(FTP_ClipBoard PROPERTIES
         MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
         MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
         MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
         MACOSX_BUNDLE TRUE
         WIN32_EXECUTABLE TRUE
-        )
+)
 
-if (QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(FTP-ClipBoard)
-endif ()
+if(QT_VERSION_MAJOR EQUAL 6)
+    qt_finalize_executable(FTP_ClipBoard)
+endif()

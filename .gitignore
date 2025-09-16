@@ -6,3 +6,5 @@
 /build
 /cmake-build-relwithdebinfo-mingw_qt
 /cmake-build-*
+.qtcreator
+.vscode
